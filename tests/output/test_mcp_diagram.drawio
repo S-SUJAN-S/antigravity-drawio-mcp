@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<mxfile host="Electron" modified="2026-07-22T08:32:44.367473+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+  <diagram id="diagram_1" name="Test MCP Page">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="1">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="n1" value="Start Node" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="n2" value="End Node" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="400" y="100" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="flow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1" source="n1" target="n2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

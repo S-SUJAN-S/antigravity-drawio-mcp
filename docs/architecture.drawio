@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+<mxfile host="Electron" modified="2026-07-22T08:31:05.990123+00:00" agent="Antigravity Flawless C4 Builder" version="30.3.14" type="device">
+  <diagram id="diagram_c4_flawless_routed" name="C4 Component Diagram">
+    <mxGraphModel dx="2560" dy="1440" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2560" pageHeight="1440" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="C4 Component Diagram&#10;Antigravity Draw.io MCP Server&#10;Component Architecture (Level 3) | Version 1.0" style="text;html=0;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=none;fillColor=none;fontSize=24;fontStyle=1;fontColor=#0F172A;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="680" y="20" width="1200" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_clients" value="Software System Boundary&#10;AI Client Applications" style="rounded=1;arcSize=6;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=3;dashed=1;shadow=0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;fontSize=16;fontStyle=1;fontColor=#0F172A;html=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="120" width="450" height="590" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_agent" value="«AI Agent»&#10;Google Antigravity Agent&#10;Primary Pair Programmer &amp; Orchestrator" style="rounded=1;arcSize=12;fillColor=#1E3A8A;strokeColor=#1E40AF;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="215" width="390" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_ide" value="«MCP Client»&#10;IDE Extensions &amp; Editors&#10;VS Code / Cursor / Claude Desktop" style="rounded=1;arcSize=12;fillColor=#0F172A;strokeColor=#334155;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="445" width="390" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_mcp_package" value="Container: Antigravity Draw.io MCP Server (src/antigravity_drawio_mcp)" style="rounded=1;arcSize=4;fillColor=#F3E8FF;strokeColor=#C084FC;strokeWidth=2;shadow=0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;fontSize=16;fontStyle=1;fontColor=#4C1D95;html=0;" vertex="1" parent="1">
+          <mxGeometry x="560" y="120" width="1950" height="590" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_mcp_engine" value="«Controller»&#10;FastMCP Request Handler&#10;Parses JSON-RPC 2.0 requests &amp; dispatches tool execution." style="rounded=1;arcSize=12;fillColor=#6D28D9;strokeColor=#5B21B6;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="600" y="180" width="1870" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_builder" value="«Service»&#10;Draw.io XML Builder&#10;Generates Draw.io XML document structures." style="rounded=1;arcSize=12;fillColor=#2563EB;strokeColor=#1D4ED8;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="600" y="310" width="900" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_parser" value="«Service»&#10;Draw.io File Parser&#10;Loads, parses, and reconstructs Draw.io documents." style="rounded=1;arcSize=12;fillColor=#0891B2;strokeColor=#0E7490;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="1570" y="310" width="900" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_verifier" value="«Service»&#10;Diagram Validator&#10;Validates geometry, collisions, and boundaries." style="rounded=1;arcSize=12;fillColor=#D97706;strokeColor=#B45309;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="600" y="440" width="900" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_exporter" value="«Adapter»&#10;CLI Export Engine&#10;Executes Draw.io CLI export operations &amp; process locks." style="rounded=1;arcSize=12;fillColor=#059669;strokeColor=#047857;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="1570" y="440" width="900" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_mermaid" value="«Service»&#10;Mermaid Conversion Engine&#10;Converts Mermaid JS flowcharts into Draw.io XML." style="rounded=1;arcSize=12;fillColor=#4F46E5;strokeColor=#4338CA;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="600" y="570" width="900" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_host_system" value="External Systems" style="rounded=1;arcSize=6;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=3;dashed=1;shadow=0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;fontSize=16;fontStyle=1;fontColor=#0F172A;html=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="770" width="2460" height="530" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_drawio_exe" value="«External Software»&#10;Draw.io Desktop App (draw.io.exe)&#10;Electron App Engine &amp; Native Command-Line Exporter" style="rounded=1;arcSize=12;fillColor=#EA580C;strokeColor=#C2410C;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="850" width="1140" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_fs" value="«External System»&#10;Persistent File Storage&#10;Persistent Disk Storage for .drawio XML, .png, and .svg Files" style="rounded=1;arcSize=12;fillColor=#334155;strokeColor=#1E293B;strokeWidth=1.5;shadow=0;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#FFFFFF;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="850" width="1140" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="comp_artifacts" value="Generated Assets Package&#10;• Draw.io Documents (.drawio)  • High-Res PNG Images  • Scalable Vector Graphics (SVG)  • PDF Reports  • Raw XML Documents&#10;Persisted across SystemVerilog UVM, Speech Processing SoC, Graphic Flowchart, and FPGA Design Flow projects" style="rounded=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#16A34A;strokeWidth=2;shadow=0;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#15803D;whiteSpace=wrap;spacing=12;html=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1040" width="2380" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend" value="Diagram Legend&#10;• Purple: Controller   • Blue: Builder Service&#10;• Teal: Parser Service   • Orange: Validator Service&#10;• Green: Exporter Adapter   • Indigo: Converter Service   • Gray: External System" style="rounded=1;arcSize=6;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=15;spacingTop=10;fontSize=12;fontColor=#0F172A;whiteSpace=wrap;html=0;" vertex="1" parent="1">
+          <mxGeometry x="1900" y="1335" width="610" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="meta_notes" value="Implementation Notes:&#10;• Stdio JSON-RPC 2.0 transport protocol&#10;• Draw.io Desktop CLI subprocess integration&#10;• Automated geometric collision &amp; layout validation&#10;• Bi-directional Mermaid JS flowchart conversion stream" style="rounded=1;arcSize=6;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=15;spacingTop=10;fontSize=11;fontColor=#334155;whiteSpace=wrap;html=0;" vertex="1" parent="1">
+          <mxGeometry x="900" y="1335" width="950" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="footer" value="Author: Sujan S. | Project: Antigravity | Diagram: C4 Component Model (Level 3) | Version: 1.0 | © 2026 Antigravity Project" style="text;html=0;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=12;fontStyle=1;fontColor=#64748B;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1360" width="800" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_agent_mcp" value="① Sends JSON-RPC Request (JSON-RPC 2.0)" style="exitX=1;exitY=0.5;entryX=0;entryY=0.3;edgeStyle=straightEdgeStyle;html=0;endArrow=classic;strokeColor=#1E3A8A;strokeWidth=2.5;fontColor=#1E3A8A;fontStyle=1;fontSize=12;labelBackgroundColor=#FFFFFF;spacingBottom=6;" edge="1" parent="1" source="comp_agent" target="comp_mcp_engine"/>
+        <mxCell id="e_ide_mcp" value="Connects via Stdio Transport" style="exitX=1;exitY=0.5;entryX=0;entryY=0.7;edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#0F172A;strokeWidth=2.5;fontColor=#0F172A;fontStyle=1;fontSize=12;labelBackgroundColor=#FFFFFF;spacingBottom=6;" edge="1" parent="1" source="comp_ide" target="comp_mcp_engine"/>
+        <mxCell id="e_mcp_builder" value="② Dispatches Tool Call (Internal API)" style="exitX=0.24;exitY=1;entryX=0.5;entryY=0;edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#6D28D9;strokeWidth=1.5;fontColor=#6D28D9;fontSize=12;labelBackgroundColor=#FFFFFF;spacingBottom=4;" edge="1" parent="1" source="comp_mcp_engine" target="comp_builder"/>
+        <mxCell id="e_mcp_parser" value="Dispatches Parse Call" style="exitX=0.76;exitY=1;entryX=0.5;entryY=0;edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#6D28D9;strokeWidth=1.5;fontColor=#6D28D9;fontSize=12;labelBackgroundColor=#FFFFFF;spacingBottom=4;" edge="1" parent="1" source="comp_mcp_engine" target="comp_parser"/>
+        <mxCell id="e_mermaid_builder" value="Converts Mermaid Stream" style="exitX=0.5;exitY=0;entryX=0.5;entryY=1;edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#4F46E5;strokeWidth=1.5;dashed=1;fontColor=#4F46E5;fontSize=11;labelBackgroundColor=#FFFFFF;spacingBottom=4;" edge="1" parent="1" source="comp_mermaid" target="comp_verifier"/>
+        <mxCell id="e_verifier_parser" value="④ Validates Layout (Internal Call)" style="exitX=1;exitY=0.5;entryX=0;entryY=0.5;edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#D97706;strokeWidth=1.5;dashed=1;fontColor=#D97706;fontSize=11;labelBackgroundColor=#FFFFFF;spacingBottom=4;" edge="1" parent="1" source="comp_verifier" target="comp_exporter"/>
+        <mxCell id="e_builder_fs" value="③ Writes .drawio Document (File I/O)" style="exitX=1;exitY=0.5;entryX=0.5;entryY=0;edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#2563EB;strokeWidth=2.5;fontColor=#2563EB;fontStyle=1;fontSize=12;labelBackgroundColor=#FFFFFF;spacingBottom=4;" edge="1" parent="1" source="comp_parser" target="comp_fs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2510" y="357"/>
+              <mxPoint x="2510" y="740"/>
+              <mxPoint x="1900" y="740"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_exporter_app" value="⑤ Invokes Draw.io CLI (CLI Invocation)" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#059669;strokeWidth=2.5;fontColor=#059669;fontStyle=1;fontSize=12;labelBackgroundColor=#FFFFFF;spacingBottom=4;" edge="1" parent="1" source="comp_exporter" target="comp_drawio_exe">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2020" y="535"/>
+              <mxPoint x="2020" y="740"/>
+              <mxPoint x="660" y="740"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_app_fs" value="⑥ Exports PNG / SVG / PDF (File Export)" style="exitX=1;exitY=0.5;entryX=0;entryY=0.5;edgeStyle=straightEdgeStyle;html=0;endArrow=classic;strokeColor=#EA580C;strokeWidth=2.5;fontColor=#EA580C;fontStyle=1;fontSize=12;labelBackgroundColor=#FFFFFF;spacingBottom=4;" edge="1" parent="1" source="comp_drawio_exe" target="comp_fs"/>
+        <mxCell id="e_fs_artifacts" value="Persists Generated Assets" style="exitX=0.5;exitY=1;entryX=0.75;entryY=0;edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#334155;strokeWidth=2;fontColor=#334155;fontSize=11;labelBackgroundColor=#FFFFFF;spacingBottom=4;" edge="1" parent="1" source="comp_fs" target="comp_artifacts"/>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

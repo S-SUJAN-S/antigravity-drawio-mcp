@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<mxfile host="Electron" modified="2026-07-22T08:30:56.876225+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+  <diagram id="diagram_1" name="Web Architecture PoC">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="1">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="client" value="Web Browser Client&#10;(React SPA)" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#1E3A8A;strokeColor=#1E40AF;strokeWidth=2;fontSize=14;fontColor=#FFFFFF;fontStyle=1;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="180" width="200" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="gateway" value="API Gateway&#10;(NGINX / Reverse Proxy)" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#0F172A;strokeColor=#334155;strokeWidth=2;fontSize=14;fontColor=#FFFFFF;fontStyle=1;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="380" y="180" width="220" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="auth_service" value="Auth Service&#10;(FastAPI / OAuth2)" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#6D28D9;strokeColor=#5B21B6;strokeWidth=1.5;fontSize=13;fontColor=#FFFFFF;fontStyle=1;spacing=6;" vertex="1" parent="1">
+          <mxGeometry x="700" y="100" width="200" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="data_service" value="Core Data Service&#10;(Python FastAPI)" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#2563EB;strokeColor=#1D4ED8;strokeWidth=1.5;fontSize=13;fontColor=#FFFFFF;fontStyle=1;spacing=6;" vertex="1" parent="1">
+          <mxGeometry x="700" y="260" width="200" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="database" value="Primary Database&#10;(PostgreSQL 16 Cluster)" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#059669;strokeColor=#047857;strokeWidth=2;fontSize=14;fontColor=#FFFFFF;fontStyle=1;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="180" width="220" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="HTTPS / JSON" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#1E3A8A;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="client" target="gateway">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="gRPC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#6D28D9;strokeWidth=1.5;fontSize=11;" edge="1" parent="1" source="gateway" target="auth_service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="REST API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#2563EB;strokeWidth=1.5;fontSize=11;" edge="1" parent="1" source="gateway" target="data_service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" value="SQL Connection" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;endArrow=classic;strokeColor=#059669;strokeWidth=2;fontSize=11;" edge="1" parent="1" source="data_service" target="database">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

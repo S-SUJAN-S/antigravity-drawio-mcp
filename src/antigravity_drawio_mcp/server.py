@@ -68,7 +68,7 @@ except ImportError:
     mcp_available = False
 
 if mcp_available:
-    mcp = FastMCP("Antigravity Draw.io MCP Server", description="Bulletproof Draw.io MCP Server for AI coding assistants")
+    mcp = FastMCP("Antigravity Draw.io MCP Server")
     mcp.tool()(create_diagram)
     mcp.tool()(export_diagram)
     mcp.tool()(open_in_drawio)

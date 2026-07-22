@@ -1,13 +1,16 @@
-name: Publish antigravity-drawio-mcp
+name: Build & Test
 
 on:
   push:
+    branches: [ main ]
     tags:
       - 'v*'
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  test-and-publish:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -32,9 +35,14 @@ jobs:
         run: |
           python -m build
 
-      - name: Publish to PyPI
+      - name: Check package metadata
+        run: |
+          python -m twine check dist/*
+
+      - name: Publish to PyPI (if secret exists)
+        if: env.PYPI_API_TOKEN != ''
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          python -m twine upload dist/*
+          python -m twine upload --skip-existing dist/*

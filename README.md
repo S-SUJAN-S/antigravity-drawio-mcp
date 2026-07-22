@@ -44,11 +44,22 @@ For detailed step-by-step setup guides, refer to the [**Integration Guide**](doc
 
 ### Quick Setup Snippets
 
-#### 🌐 Google Antigravity (`.gemini/antigravity/mcp_config.json`)
+#### 🌐 Google Antigravity (`~/.gemini/config/mcp_config.json`)
 ```json
 {
   "mcpServers": {
-    "antigravity_drawio": {
+    "drawio": {
+      "command": "uvx",
+      "args": ["antigravity-drawio-mcp"]
+    }
+  }
+}
+```
+*Or using standard python:*
+```json
+{
+  "mcpServers": {
+    "drawio": {
       "command": "python",
       "args": ["-m", "antigravity_drawio_mcp.server"]
     }

@@ -43,15 +43,29 @@ antigravity-drawio-mcp --help
 Google Antigravity uses Model Context Protocol (MCP) servers to give AI agents native file generation and command capabilities.
 
 ### Config File Location
-Add the server entry to your workspace configuration file:
-- **Workspace Config**: `<workspace_root>/.gemini/antigravity/mcp_config.json`
-- **Global User Config**: `~/.gemini/antigravity/mcp_config.json`
+Add the server entry to your global Antigravity configuration file:
+- **Global Config**: `~/.gemini/config/mcp_config.json`
+- **Workspace Config**: `<workspace_root>/.gemini/config/mcp_config.json`
 
-### `mcp_config.json` Snippet
+### `mcp_config.json` Snippet (via `uvx` - PyPI Published Package)
 ```json
 {
   "mcpServers": {
-    "antigravity_drawio": {
+    "drawio": {
+      "command": "uvx",
+      "args": [
+        "antigravity-drawio-mcp"
+      ]
+    }
+  }
+}
+```
+
+### `mcp_config.json` Snippet (via Local `python`)
+```json
+{
+  "mcpServers": {
+    "drawio": {
       "command": "python",
       "args": [
         "-m",

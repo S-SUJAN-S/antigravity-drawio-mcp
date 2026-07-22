@@ -26,7 +26,7 @@ pip install antigravity-drawio-mcp
 
 Or install from source:
 ```bash
-git clone https://github.com/sujan/antigravity-drawio-mcp.git
+git clone https://github.com/S-SUJAN-S/antigravity-drawio-mcp.git
 cd antigravity-drawio-mcp
 pip install -e .
 ```
@@ -169,5 +169,5 @@ Send initialize request over stdin:
 ```
 Expected output:
 ```json
-{"jsonrpc": "2.0", "id": 1, "result": {"protocolVersion": "2024-11-05", "serverInfo": {"name": "Antigravity Draw.io MCP Server", "version": "1.0.0"}}}
+{"jsonrpc": "2.0", "id": 1, "result": {"protocolVersion": "2024-11-05", "serverInfo": {"name": "Antigravity Draw.io MCP Server", "version": "1.0.1"}}}
 ```

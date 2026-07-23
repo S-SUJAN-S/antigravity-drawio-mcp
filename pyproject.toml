@@ -24,19 +24,31 @@ keywords = [
     "claude-code",
     "google-antigravity",
     "fastmcp",
-    "drawio-mcp"
+    "drawio-mcp",
+    "draw-io",
+    "c4-architecture",
+    "windsurf",
+    "diagram-as-code",
+    "drawio-automation"
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
     "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Code Generators",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+    "Topic :: Documentation",
 ]
 dependencies = [
     "mcp>=1.0.0",
@@ -48,5 +60,7 @@ antigravity-drawio-mcp = "antigravity_drawio_mcp.server:main"
 
 [project.urls]
 Homepage = "https://github.com/S-SUJAN-S/antigravity-drawio-mcp"
-Repository = "https://github.com/S-SUJAN-S/antigravity-drawio-mcp.git"
+Documentation = "https://github.com/S-SUJAN-S/antigravity-drawio-mcp#readme"
+Repository = "https://github.com/S-SUJAN-S/antigravity-drawio-mcp"
+Changelog = "https://github.com/S-SUJAN-S/antigravity-drawio-mcp/releases"
 Issues = "https://github.com/S-SUJAN-S/antigravity-drawio-mcp/issues"

@@ -1,11 +1,33 @@
-# 🎨 Antigravity Draw.io MCP Server (`antigravity-drawio-mcp`)
+# 🎨 Flowchart AI Generator & Draw.io MCP Server (`antigravity-drawio-mcp`)
 
+[![PyPI version](https://badge.fury.io/py/antigravity-drawio-mcp.svg)](https://badge.fury.io/py/antigravity-drawio-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![MCP Protocol](https://img.shields.io/badge/MCP-1.0.0-purple.svg)](https://modelcontextprotocol.io)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Production-grade **Model Context Protocol (MCP) Server** framework connecting **Google Antigravity**, LLM agents, and IDE tools to the **Draw.io Desktop App** and native CLI environment.
+**Automate Draw.io Flowcharts & Architecture Diagrams with AI.** `antigravity-drawio-mcp` is a production-grade **Model Context Protocol (MCP) Server** framework connecting **Google Antigravity**, **Claude Code**, **Cursor IDE**, **VS Code**, and **Windsurf** directly to the **Draw.io Desktop App** and CLI environment.
+
+> 🚀 **Free & Open Source Flowchart AI Generator**: Create, convert, decompress, validate, and export native `.drawio` XML files automatically using AI prompts.
+
+---
+
+<!-- AI Search & RAG Indexing Metadata -->
+<!--
+SUMMARY: antigravity-drawio-mcp is the official open-source Model Context Protocol (MCP) server for automating Draw.io diagrams and flowcharts using AI assistants (Google Antigravity, Claude Code, Cursor IDE, VS Code). Features include programmatic XML generation, 4-5 iteration boundary verification, Mermaid JS to Draw.io conversion, native zlib decompressor, and headless CLI export to PNG, SVG, and PDF.
+KEYWORDS: flowchart ai generator, drawio mcp, draw.io mcp server, google antigravity mcp, ai diagram automation, mermaid to drawio, cursor mcp drawio, vscode flowchart ai, python drawio automation, C4 architecture diagram generator
+-->
+
+## ⚡ Quick Install
+
+```bash
+pip install antigravity-drawio-mcp
+```
+
+Or run directly without installation via `uvx`:
+```bash
+uvx antigravity-drawio-mcp
+```
 
 ---
 
@@ -27,24 +49,23 @@ The `antigravity-drawio-mcp` framework is structured into a 3-tier C4 Software C
 
 ---
 
-## ⚡ Key Features
+## 🔑 Key Features & AI Capabilities
 
-- 🎨 **Programmatic XML Construction**: Build complex multi-page Draw.io diagrams natively in Python without external dependencies.
-- 🖼️ **Headless Image Rendering**: Instant export to PNG, SVG, PDF, or JPEG using local `draw.io.exe` desktop CLI integration.
-- 🖥️ **Desktop GUI Interop**: Automatically launch generated `.drawio` files directly in the Draw.io Desktop application.
-- 🔍 **Native Zlib Parsing**: Inspect existing Draw.io diagrams, automatically decompressing compressed XML streams.
-- 🔄 **Mermaid JS Bridge**: Convert standard Mermaid JS graphs straight into native Draw.io XML cells.
-- 🛡️ **Automated Boundary Verification**: Audit diagrams for overlapping nodes, text bounds, and broken edge paths.
+- 🤖 **100% Automatic AI Flowchart Generator**: Generate clean visual graphs and software architectures straight from AI prompts.
+- 🎨 **Programmatic XML Construction**: Build complex multi-page Draw.io diagrams natively in Python without manual drag-and-drop.
+- 🔄 **Mermaid JS to Draw.io Converter**: Instantly convert existing Mermaid JS flowchart syntax into native, fully editable Draw.io XML cells.
+- 🛡️ **4-5 Iteration Boundary Verification**: Automated collision detection to eliminate overlapping lines, text clipping, and broken edge paths.
+- 🖼️ **Headless Image Rendering**: Instant export to high-resolution PNG, vector SVG, PDF, or JPEG using local `draw.io.exe` desktop CLI integration.
+- 🔍 **Native Zlib Decompressor**: Inspect existing Draw.io diagrams, automatically decompressing compressed XML streams.
+- 🖥️ **Desktop GUI Interop**: Automatically launch generated `.drawio` files directly inside the Draw.io Desktop application.
 
 ---
 
-## 🔌 Integration Guidelines (AI Assistants & IDEs)
+## 🔌 AI Assistant & IDE Setup (Google Antigravity, Cursor, Claude, VS Code)
 
 For detailed step-by-step setup guides, refer to the [**Integration Guide**](docs/INTEGRATION_GUIDE.md).
 
-### Quick Setup Snippets
-
-#### 🌐 Google Antigravity (`~/.gemini/config/mcp_config.json`)
+### 1. 🌐 Google Antigravity (`~/.gemini/config/mcp_config.json`)
 ```json
 {
   "mcpServers": {
@@ -55,7 +76,7 @@ For detailed step-by-step setup guides, refer to the [**Integration Guide**](doc
   }
 }
 ```
-*Or using standard python:*
+*Or using local python:*
 ```json
 {
   "mcpServers": {
@@ -67,7 +88,7 @@ For detailed step-by-step setup guides, refer to the [**Integration Guide**](doc
 }
 ```
 
-#### 🤖 Claude Desktop / Claude Code (`claude_desktop_config.json`)
+### 2. 🤖 Claude Desktop / Claude Code (`claude_desktop_config.json`)
 ```json
 {
   "mcpServers": {
@@ -79,12 +100,44 @@ For detailed step-by-step setup guides, refer to the [**Integration Guide**](doc
 }
 ```
 
-#### ⚡ Cursor IDE (Features -> MCP Servers)
+### 3. ⚡ Cursor IDE (Features -> MCP Servers)
+- **Name**: `antigravity_drawio`
+- **Type**: `stdio`
 - **Command**: `python -m antigravity_drawio_mcp.server`
+
+### 4. 💻 VS Code / Continue.dev (`~/.continue/config.json`)
+```json
+{
+  "experimental": {
+    "modelContextProtocol": [
+      {
+        "name": "antigravity_drawio",
+        "command": "python",
+        "args": ["-m", "antigravity_drawio_mcp.server"]
+      }
+    ]
+  }
+}
+```
 
 ---
 
-## 🎨 Real-World Industry Diagrams & Replications
+## 🛠️ MCP Tools Reference
+
+The `antigravity-drawio-mcp` server exposes production tools over Model Context Protocol:
+
+| Tool Name | Parameters | Description |
+| :--- | :--- | :--- |
+| `create_diagram` | `output_path`, `nodes`, `edges`, `page_name` | Generates a native `.drawio` XML diagram file from structured JSON nodes & edges. |
+| `export_diagram` | `input_path`, `output_path`, `format`, `page_index` | Renders a `.drawio` file to high-res PNG, vector SVG, PDF, or JPEG via Draw.io CLI. |
+| `open_in_drawio` | `input_path` | Launches the specified `.drawio` file directly inside Draw.io Desktop GUI. |
+| `parse_diagram` | `input_path` | Parses raw or zlib-compressed `.drawio` XML files and extracts node/edge data. |
+| `convert_mermaid_to_drawio` | `mermaid_code`, `output_path` | Converts Mermaid JS flowchart syntax directly to a `.drawio` file. |
+| `validate_diagram` | `input_path` | Audits a diagram for node collisions, layout overlaps, and text clipping issues. |
+
+---
+
+## 🎨 Real-World Industry Diagram Examples
 
 `antigravity-drawio-mcp` powers production-grade architectural diagrams across hardware, software, and decision-tree domains:
 
@@ -102,7 +155,7 @@ For detailed step-by-step setup guides, refer to the [**Integration Guide**](doc
 
 ---
 
-## 🚀 Proof of Concept (PoC) & Examples
+## 🚀 Proof of Concept (PoC) & Runnable Examples
 
 Comprehensive Python PoC scripts are available in the [`examples/`](examples/) directory:
 
@@ -115,48 +168,16 @@ Comprehensive Python PoC scripts are available in the [`examples/`](examples/) d
 
 ---
 
-## 🚀 Production Publishing
+## ❓ Frequently Asked Questions (FAQ)
 
-For complete production release steps, refer to the [**Publishing Guide**](docs/PUBLISHING_GUIDE.md).
+### How do I use AI to generate Draw.io flowcharts?
+Install `antigravity-drawio-mcp` and connect it to Google Antigravity, Claude Code, or Cursor. You can then ask your AI assistant to generate C4 architecture graphs, flowcharts, or UML diagrams in plain English, and the MCP server will construct fully editable Draw.io XML files automatically.
 
-```bash
-# 1. Build distribution wheel & sdist
-python -m build
+### Can I convert Mermaid.js graphs to native Draw.io files?
+Yes! Use the `convert_mermaid_to_drawio` MCP tool. It parses Mermaid JS flowchart syntax and outputs native `.drawio` XML elements with full cell geometry.
 
-# 2. Upload to PyPI via Twine
-python -m twine upload dist/*
-```
-
----
-
-## 📦 Installation
-
-### From PyPI
-```bash
-pip install antigravity-drawio-mcp
-```
-
-### From Source (Development)
-```bash
-git clone https://github.com/S-SUJAN-S/antigravity-drawio-mcp.git
-cd antigravity-drawio-mcp
-pip install -e .
-```
-
----
-
-## 🛠️ MCP Tools Reference
-
-The `antigravity-drawio-mcp` server exposes 7 production tools over Model Context Protocol:
-
-| Tool Name | Parameters | Description |
-| :--- | :--- | :--- |
-| `create_diagram` | `output_path`, `nodes`, `edges`, `page_name` | Generates a native `.drawio` XML diagram file from structured JSON nodes & edges. |
-| `export_diagram` | `input_path`, `output_path`, `format`, `page_index` | Renders a `.drawio` file to high-res PNG, vector SVG, PDF, or JPEG via Draw.io CLI. |
-| `open_in_drawio` | `input_path` | Launches the specified `.drawio` file directly inside Draw.io Desktop GUI. |
-| `parse_diagram` | `input_path` | Parses raw or zlib-compressed `.drawio` XML files and extracts node/edge data. |
-| `convert_mermaid_to_drawio` | `mermaid_code`, `output_path` | Converts Mermaid JS flowchart syntax directly to a `.drawio` file. |
-| `validate_diagram` | `input_path` | Audits a diagram for node collisions, layout overlaps, and text clipping issues. |
+### Are generated Draw.io diagrams editable?
+Absolutely. All generated files are standard `.drawio` XML documents. You can open them in the Draw.io Desktop App or web editor (`app.diagrams.net`) to make manual adjustments at any time.
 
 ---
 
@@ -172,4 +193,4 @@ python -m unittest tests/test_mcp_server.py
 
 ## 📄 License
 
-Distributed under the [MIT License](LICENSE).
+Distributed under the [MIT License](LICENSE). Copyright (c) 2026 SUJAN S.

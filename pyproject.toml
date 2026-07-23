@@ -5,11 +5,27 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "antigravity-drawio-mcp"
 version = "1.0.4"
-description = "Production-grade Model Context Protocol (MCP) server for Draw.io & Google Antigravity"
+description = "Automate Flowcharts & Draw.io Diagrams with AI. Official Model Context Protocol (MCP) Server for Google Antigravity, Claude Code, Cursor, and VS Code."
 readme = "README.md"
 authors = [{ name = "SUJAN S", email = "ssujan6299@gmail.com" }]
 license = { text = "MIT" }
-keywords = ["mcp", "drawio", "antigravity", "ai", "diagrams", "architecture", "flowchart"]
+keywords = [
+    "mcp",
+    "drawio",
+    "antigravity",
+    "flowchart-ai",
+    "flowchart-generator",
+    "diagram-automation",
+    "model-context-protocol",
+    "ai-diagrams",
+    "architecture-diagram",
+    "mermaid-to-drawio",
+    "cursor-ide",
+    "claude-code",
+    "google-antigravity",
+    "fastmcp",
+    "drawio-mcp"
+]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "antigravity-drawio-mcp"
-version = "1.0.4"
+version = "1.0.5"
 description = "Automate Flowcharts & Draw.io Diagrams with AI. Official Model Context Protocol (MCP) Server for Google Antigravity, Claude Code, Cursor, and VS Code."
 readme = "README.md"
 authors = [{ name = "SUJAN S", email = "ssujan6299@gmail.com" }]

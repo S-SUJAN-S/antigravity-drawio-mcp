@@ -1,13 +1,18 @@
-# Progress Log
+# Progress - teamwork_preview_worker_m2
 
-Last visited: 2026-07-24T00:58:16Z
+Last visited: 2026-07-25T17:01:30Z
 
-- [x] Create ORIGINAL_REQUEST.md and BRIEFING.md
-- [x] Read analysis.md from explorer_m2 and M1_SEO_Audit_Report.md
-- [x] Read existing README.md and pyproject.toml
-- [x] Update README.md with high-density keywords, badges, AI prompt blockquote, JSON-LD microdata, 8 features, 8 FAQs, GitHub topics block
-- [x] Update pyproject.toml with 20 keywords, URLs, 17 classifiers
-- [x] Run verification commands (pip install -e ., pytest / unittest)
-- [x] Update BRIEFING.md and progress.md
-- [ ] Write handoff.md
-- [ ] Notify parent via send_message
+## Status: COMPLETED
+
+### Completed Steps
+- [x] Initialized ORIGINAL_REQUEST.md and BRIEFING.md
+- [x] Read explorer analysis reports (m2_1, m2_2, m2_3)
+- [x] Inspected existing implementation in `src/antigravity_drawio_mcp/mermaid_converter.py` and test suite `tests/test_mcp_server.py`
+- [x] Verified baseline test suite (12/12 passing)
+- [x] Implemented Node Shape Syntax support (`{label}`, `(label)`, `[label]`) with exact Draw.io styles
+- [x] Implemented Multi-Hop Arrow Line Parsing supporting inline labels (`-- text -->`) and pipe labels (`-->|text|`)
+- [x] Implemented Subgraph Container Support (`subgraph id [title]` / `subgraph title` ... `end`) with swimlane container shapes placed behind child nodes using dynamic bounding boxes
+- [x] Implemented Topological Depth Layout Engine with cycle-tolerant BFS (`x = 80 + depth * 250`, `y = 80 + row * 110`)
+- [x] Added unit tests 13-16 in `tests/test_mcp_server.py`
+- [x] Verified full unit test suite (16/16 passing)
+- [x] Updated BRIEFING.md, progress.md, and created handoff.md

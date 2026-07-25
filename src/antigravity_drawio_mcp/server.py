@@ -32,7 +32,7 @@ def create_diagram(output_path: str, nodes: list, edges: list, page_name: str = 
             )
         saved = builder.save(output_path)
         return json.dumps({"status": "success", "path": saved})
-    except ValueError as e:
+    except Exception as e:
         return json.dumps({"status": "error", "message": str(e)})
 
 def export_diagram(input_path: str, output_path: str, format: str = "png", page_index: int = 1) -> str:
@@ -114,7 +114,7 @@ def run_stdio_fallback():
             req_id = req.get("id")
             
             if method == "initialize":
-                res = {"jsonrpc": "2.0", "id": req_id, "result": {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "Antigravity Draw.io MCP Server", "version": "1.0.6"}}}
+                res = {"jsonrpc": "2.0", "id": req_id, "result": {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "Antigravity Draw.io MCP Server", "version": "1.1.1"}}}
             elif method == "tools/list":
                 res = {"jsonrpc": "2.0", "id": req_id, "result": {"tools": [
                     {"name": "create_diagram", "description": "Create a new .drawio XML diagram file"},

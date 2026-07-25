@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<mxfile host="Electron" modified="2026-07-25T11:35:42.022186+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+  <diagram id="diagram_1" name="Mermaid Diagram">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="1">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="outer" value="Outer Container" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#F8F9FA;strokeColor=#6C757D;strokeWidth=1.5;fontStyle=1;fontSize=12;startSize=25;horizontal=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="45" width="180" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="A" value="Node A" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="140" height="60" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

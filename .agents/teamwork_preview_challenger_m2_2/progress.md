@@ -1,18 +1,13 @@
-# Progress - Challenger 2 (Milestone 2)
+# Progress Log
 
-Last visited: 2026-07-24T00:58:52Z
+Last visited: 2026-07-25T11:33:10Z
 
-## Status
-Completed
-
-## Steps
-- [x] Create ORIGINAL_REQUEST.md
-- [x] Create BRIEFING.md
-- [x] Create progress.md
-- [x] Inspect pyproject.toml and test suite files
-- [x] Empirically parse pyproject.toml with tomllib script
-- [x] Execute python -m unittest tests/test_mcp_server.py
-- [x] Stress-test edge cases & assumptions
-- [x] Update BRIEFING.md with Attack Surface & Findings
-- [ ] Write handoff.md report
-- [ ] Send completion message to parent
+- Initialized briefing and original request log.
+- View `PROJECT.md` and `src/antigravity_drawio_mcp/mermaid_converter.py`.
+- Developed standalone empirical test harnesses (`test_m2_empirical.py`, `test_stress_m2.py`, `test_all_empirical_report.py`).
+- Executed tests:
+  - Branching & Cyclic graphs (A->B, A->C, B->D, C->D, D->A): PASS (`x = 80 + depth * 250`, delta_x = 250.0).
+  - Single & parallel subgraphs: PASS (swimlane bounds enclose nodes, zero node collisions).
+  - Nested subgraphs: FAIL (outer and inner container bounds collapse to identical coordinates (60.0, 45.0, 430.0, 105.0) causing title header overlap).
+- Written `challenge_report.md` and `handoff.md`.
+- Sent final verdict to parent.

@@ -27,7 +27,8 @@ class DrawIOVerifier:
             return (nA["x"] <= nB["x"] and
                     nA["y"] <= nB["y"] and
                     nA["x"] + nA["width"] >= nB["x"] + nB["width"] and
-                    nA["y"] + nA["height"] >= nB["y"] + nB["height"])
+                    nA["y"] + nA["height"] >= nB["y"] + nB["height"] and
+                    (nA["width"] > nB["width"] or nA["height"] > nB["height"]))
 
         # Check for node collisions (excluding container box wrappers)
         for i in range(len(nodes)):
@@ -67,7 +68,14 @@ class DrawIOVerifier:
         parser = DrawIOParser(drawio_filepath)
         parsed = parser.parse()
         if not parsed["pages"]:
-            return {"resolved": True, "passes": 0, "is_clean": True, "issues": []}
+            return {
+                "node_count": 0,
+                "edge_count": 0,
+                "resolved": True,
+                "passes": 0,
+                "is_clean": True,
+                "issues": []
+            }
 
         page = parsed["pages"][0]
         nodes = page["nodes"]
@@ -77,7 +85,8 @@ class DrawIOVerifier:
             return (nA["x"] <= nB["x"] and
                     nA["y"] <= nB["y"] and
                     nA["x"] + nA["width"] >= nB["x"] + nB["width"] and
-                    nA["y"] + nA["height"] >= nB["y"] + nB["height"])
+                    nA["y"] + nA["height"] >= nB["y"] + nB["height"] and
+                    (nA["width"] > nB["width"] or nA["height"] > nB["height"]))
 
         passes = 0
         max_passes = 10

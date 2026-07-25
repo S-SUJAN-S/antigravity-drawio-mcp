@@ -22,12 +22,12 @@ Execute comprehensive code refactor and feature enhancement for `antigravity-dra
 3. **On failure**: Retry -> Replace -> Skip -> Redistribute -> Redesign -> Escalate
 4. **Succession**: Self-succeed at 16 spawns
 - **Work items**:
-  1. Milestone 1: Security & Process Safety [pending]
-  2. Milestone 2: Mermaid Converter & Layout Engine [pending]
+  1. Milestone 1: Security & Process Safety [done]
+  2. Milestone 2: Mermaid Converter & Layout Engine [in-progress]
   3. Milestone 3: Builder Validation & Auto-Collision Tool [pending]
   4. Milestone 4: Test Suite Expansion, Version Bump & Release Prep [pending]
-- **Current phase**: 1
-- **Current focus**: Milestone 1 - Security & Process Safety (R1 & R2)
+- **Current phase**: 2
+- **Current focus**: Milestone 2 Remediation (Nested Subgraph Bounds Calculation) & Gate Verification
 
 ## 🔒 Key Constraints
 - Dispatch-only orchestrator: NEVER modify project source/docs files directly.
@@ -38,31 +38,30 @@ Execute comprehensive code refactor and feature enhancement for `antigravity-dra
 
 ## Current Parent
 - Conversation ID: 033e5fca-7b4f-4ea9-bb67-10e729f6ecf3
-- Updated: not yet
+- Updated: yes
 
 ## Key Decisions Made
-- Decomposed 10 audit items into 4 clear milestones.
+- Resumed as Generation 2 orchestrator.
+- Prioritizing M2 remediation for nested subgraph bounding boxes, re-verification of Challenger M2-2, then proceeding to M3 and M4.
 
 ## Team Roster
 | Agent | Type | Work Item | Status | Conv ID |
 |-------|------|-----------|--------|---------|
-| Explorer M1-1 | teamwork_preview_explorer | M1 Parser Security | Completed | ad144ac0-22e9-4a22-b05b-f5b00072df70 |
-| Explorer M1-2 | teamwork_preview_explorer | M1 Exporter Resolution | Completed | 3879849b-205d-4c95-a607-c3c6d335a4ea |
-| Explorer M1-3 | teamwork_preview_explorer | M1 Exporter Safety | Completed | 65e12bcd-d8b4-44b9-824c-3d9f818931af |
-| Worker M1 | teamwork_preview_worker | M1 Implementation | In-Progress | 9db00ec2-68bc-4480-bffc-5b85c6e3f339 |
+| (Gen 1 Agents 1-18) | various | M1 & M2 initial work | Completed | various |
 
 ## Succession Status
 - Succession required: no
-- Spawn count: 4 / 16
-- Pending subagents: 9db00ec2-68bc-4480-bffc-5b85c6e3f339
-- Predecessor: none
+- Spawn count: 0 / 16
+- Pending subagents: none
+- Predecessor: Gen 1
 - Successor: not yet spawned
 
 ## Active Timers
-- Heartbeat cron: task-13
+- Heartbeat cron: task-15 (active)
 - Safety timer: none
 
 ## Artifact Index
 - C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/orchestrator/plan.md — Project Plan
 - C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/orchestrator/progress.md — Liveness & Progress
 - C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/orchestrator/PROJECT.md — Project Breakdown & Scope
+

@@ -1,116 +1,54 @@
-# Handoff Report — Explorer 3 (Milestone 1)
-
-**Agent Identity**: Explorer 3 (GitHub & PyPI Metadata Audit)  
-**Working Directory**: `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/teamwork_preview_explorer_m1_3`  
-**Target Package**: `antigravity-drawio-mcp`  
-**Date**: 2026-07-24  
-
----
+# Handoff Report: Milestone 1 - R2 Exporter Non-Destructive Export & Process Safety
 
 ## 1. Observation
-
-Direct observations from repository files at `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp`:
-
-1. **`pyproject.toml` (lines 12–28)**:
-   ```toml
-   keywords = [
-       "mcp",
-       "drawio",
-       "antigravity",
-       "flowchart-ai",
-       "flowchart-generator",
-       "diagram-automation",
-       "model-context-protocol",
-       "ai-diagrams",
-       "architecture-diagram",
-       "mermaid-to-drawio",
-       "cursor-ide",
-       "claude-code",
-       "google-antigravity",
-       "fastmcp",
-       "drawio-mcp"
-   ]
-   ```
-   *Observed*: 15 keywords present. Crucial standard terms `mcp-server`, `draw.io`, `diagram-as-code`, `windsurf`, and `c4-architecture` are missing.
-
-2. **`pyproject.toml` (lines 29–40)**:
-   ```toml
-   classifiers = [
-       "Development Status :: 5 - Production/Stable",
-       "Intended Audience :: Developers",
-       "License :: OSI Approved :: MIT License",
-       "Programming Language :: Python :: 3",
-       "Programming Language :: Python :: 3.8",
-       "Programming Language :: Python :: 3.9",
-       "Programming Language :: Python :: 3.10",
-       "Programming Language :: Python :: 3.11",
-       "Programming Language :: Python :: 3.12",
-       "Topic :: Software Development :: Code Generators",
-   ]
-   ```
-   *Observed*: 10 classifiers present. Missing `Environment :: Console`, `Operating System :: OS Independent`, `Programming Language :: Python :: 3 :: Only`, `Programming Language :: Python :: 3.13`, `Topic :: Multimedia :: Graphics :: Editors :: Vector-Based`, and `Topic :: Software Development :: Documentation`.
-
-3. **`pyproject.toml` (lines 49–53)**:
-   ```toml
-   [project.urls]
-   Homepage = "https://github.com/S-SUJAN-S/antigravity-drawio-mcp"
-   Repository = "https://github.com/S-SUJAN-S/antigravity-drawio-mcp.git"
-   Issues = "https://github.com/S-SUJAN-S/antigravity-drawio-mcp/issues"
-   ```
-   *Observed*: 3 URLs. `Repository` points to `.git` HTTPS clone URI rather than standard web repository landing page. `Documentation` and `Changelog` URLs are absent.
-
-4. **`README.md` (lines 3–7)**:
-   ```markdown
-   [![PyPI version](https://badge.fury.io/py/antigravity-drawio-mcp.svg)](https://badge.fury.io/py/antigravity-drawio-mcp)
-   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-   [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-   [![MCP Protocol](https://img.shields.io/badge/MCP-1.0.0-purple.svg)](https://modelcontextprotocol.io)
-   [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-   ```
-   *Observed*: PyPI version uses `badge.fury.io`. Lacks GitHub Actions workflow build badge and PyPI monthly download statistics badge.
-
-5. **`.github/workflows/publish.yml` (lines 1–49)**:
-   ```yaml
-   name: Build & Test
-   on:
-     push:
-       branches: [ main ]
-   ```
-   *Observed*: Active GitHub Actions workflow exists for automated build & test, but is not linked in README badges.
-
----
+- Target File: `src/antigravity_drawio_mcp/exporter.py` (104 lines total).
+- Project Scope Document: `.agents/orchestrator/PROJECT.md` line 16 specifies: `exporter.py`: `get_drawio_executable()` check macOS (`/Applications/draw.io.app/Contents/MacOS/draw.io`), Linux (`/usr/bin/drawio`, `/opt/drawio/drawio`), and `shutil.which("drawio")`. Process termination must be cross-platform (`platform.system()`) and deferred until locking occurs.
+- Executable Resolution (`exporter.py` lines 10-42): Checks Windows, macOS, Linux paths, and falls back to `shutil.which("drawio")` / `shutil.which("draw.io")`. Verified functional on local host (`C:\Program Files\draw.io\draw.io.exe`).
+- Process Kill Method (`exporter.py` lines 45-58): Currently calls `taskkill /IM draw.io.exe /F` on Windows and `pkill -f draw.io`, `pkill -f drawio` on POSIX inside a single `try...except` block.
+- Export Execution Flow (`exporter.py` lines 60-96): Executes Attempt 1 via `subprocess.run()`. If output missing/empty, calls `_kill_running_instances()` and executes Attempt 2.
+- Test Execution Command: `python -m unittest discover -s tests` executed successfully with 4 passing tests in 0.162s.
 
 ## 2. Logic Chain
-
-1. **Premise 1**: PyPI search, GitHub topic discovery, and AI web search engines rely heavily on metadata fields (`keywords`, `classifiers`, `[project.urls]`, repo topics, README badges) to catalog, index, and rank packages.
-2. **Premise 2**: PyPI users search for `mcp-server` and `draw.io` as primary query terms. Currently, `pyproject.toml` has `mcp` and `drawio`, missing exact `mcp-server` and dot-spelling `draw.io`. Adding these terms directly expands search match index.
-3. **Premise 3**: Standard PyPI package listings render sidebar buttons based on standardized URL keys (`Documentation`, `Changelog`, `Homepage`, `Repository`, `Issues`). Adding explicit `Documentation` and `Changelog` links enhances navigational UX on PyPI.
-4. **Premise 4**: GitHub Actions workflow `publish.yml` builds and tests code, but is invisible on README. Adding a dynamic workflow badge (`actions/workflows/publish.yml/badge.svg`) and PyPI download badge provides immediate visual trust and build health verification.
-5. **Premise 5**: GitHub topics (up to 20) index repositories under `github.com/topics/<topic>`. A curated 20-topic list aligned with protocol, ecosystem, IDEs, and functional capabilities ensures maximum repository exposure.
-
----
+1. **Observation**: Attempt 1 in `exporter.py` runs `build_cmd()` without calling `_kill_running_instances()`.
+   **Inference**: If Attempt 1 produces a valid output file, the function returns immediately. This achieves non-destructive export.
+2. **Observation**: `subprocess.run()` in Attempt 1 is not wrapped in `try...except`. If `subprocess.run` raises an `OSError` or `PermissionError`, it aborts without trying Attempt 2.
+   **Inference**: Wrapping Attempt 1 in `try...except Exception:` ensures any process execution exception correctly triggers the fallback process termination and Attempt 2.
+3. **Observation**: On POSIX systems, `_kill_running_instances()` executes two `subprocess.run` calls (`pkill -f draw.io` and `pkill -f drawio`) inside one `try` block. If `pkill` is missing from `%PATH%`, `subprocess.run` raises `FileNotFoundError`, skipping the second call.
+   **Inference**: Pre-checking utility availability using `shutil.which("pkill")` / `shutil.which("killall")` and wrapping individual subprocess calls in isolated `try...except` blocks guarantees fault-tolerant execution regardless of missing system tools or OS variations.
+4. **Observation**: On Windows, only `draw.io.exe` is killed, omitting `drawio.exe`.
+   **Inference**: Iterating over `["draw.io.exe", "drawio.exe"]` ensures complete coverage of process variants on Windows.
 
 ## 3. Caveats
-
-- **External Topic Setting**: Setting GitHub Repository Topics on `github.com` requires repository owner admin access via GitHub Web UI or GitHub CLI (`gh repo edit --add-topic ...`).
-- **PyPI Index Propagation**: PyPI search index updates after package release (upload to PyPI).
-- No other caveats.
-
----
+- Headless CI Environments: Draw.io Desktop executable is usually absent in headless Linux CI runner environments. `DrawIOExporter.get_drawio_executable()` returns `None`, which is gracefully handled by test skips in `tests/test_mcp_server.py`.
+- Data Loss in Fallback: Process termination is destructive to open, unsaved diagrams in Draw.io GUI windows. This risk is mitigated by performing Attempt 1 non-destructively first, and only terminating processes as a secondary fallback after emitting a clear `sys.stderr` warning.
 
 ## 4. Conclusion
-
-The metadata for `antigravity-drawio-mcp` is functionally solid, but expanding `pyproject.toml` (keywords array to 20, classifiers to 17, project URLs to 5), updating README badges to standardized dynamic Shields.io badges (with build status & download metrics), and populating 20 curated GitHub repository topics will maximize search engine indexability, AI RAG discoverability, and PyPI ranking.
-
-Detailed report produced in `analysis.md`.
-
----
+`src/antigravity_drawio_mcp/exporter.py` has been fully analyzed. A complete, non-destructive export and fault-tolerant process termination strategy has been formulated. The proposed implementation:
+- Executes non-destructive exports by default.
+- Defers process termination until export locking/failure occurs.
+- Guarantees cross-platform safety using `shutil.which` checks and isolated exception blocks, eliminating crashes on non-Windows platforms or environments lacking `taskkill`/`pkill`/`killall`.
+- Has a clear proposed code patch in `analysis.md`.
 
 ## 5. Verification Method
+1. **Existing Unit Tests**:
+   Command: `python -m unittest discover -s tests`
+   Expected Result: All tests pass cleanly without errors or warnings.
+2. **Non-Destructive Mock Verification**:
+   Command / Script:
+   ```python
+   from unittest.mock import patch
+   from antigravity_drawio_mcp.exporter import DrawIOExporter
 
-1. **Verify Files**:
-   - Inspect `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/teamwork_preview_explorer_m1_3/analysis.md`
-   - Inspect `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/teamwork_preview_explorer_m1_3/handoff.md`
-
-2. **Verify Metadata Formatting**:
-   - Run `python -m twine check dist/*` or `pip install build twine && python -m build` to verify metadata validity when edits are applied by implementer.
+   with patch("subprocess.run") as mock_run, \
+        patch.object(DrawIOExporter, "_kill_running_instances") as mock_kill, \
+        patch("os.path.exists", return_value=True), \
+        patch("os.path.getsize", return_value=1024), \
+        patch.object(DrawIOExporter, "get_drawio_executable", return_value="dummy_exe"):
+       mock_run.return_value.returncode = 0
+       res = DrawIOExporter.export("in.drawio", "out.png")
+       assert res == "out.png"
+       mock_kill.assert_not_called()
+   ```
+   Expected Result: `mock_kill` is never called when Attempt 1 succeeds.
+3. **Fallback & Tool Safety Verification**:
+   Command / Script: Run fallback mock where Attempt 1 fails and `shutil.which` returns `None` for process utilities. Verify `_kill_running_instances()` logs warning to `sys.stderr` and completes without throwing an unhandled exception.

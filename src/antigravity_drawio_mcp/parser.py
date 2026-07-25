@@ -1,7 +1,10 @@
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
+import defusedxml.common
 import zlib
 import base64
+import binascii
 import urllib.parse
+import traceback
 
 class DrawIOParser:
     def __init__(self, filepath_or_xml):
@@ -18,12 +21,20 @@ class DrawIOParser:
             compressed = base64.b64decode(text)
             decompressed = zlib.decompress(compressed, -15)
             return urllib.parse.unquote(decompressed.decode("utf-8"))
-        except Exception:
+        except (binascii.Error, zlib.error, UnicodeDecodeError):
             return text
 
     def parse(self):
         xml_content = self._load_xml()
-        root = ET.fromstring(xml_content)
+        try:
+            root = ET.fromstring(xml_content)
+        except (ET.ParseError, defusedxml.common.DefusedXmlException) as e:
+            tb = traceback.format_exc()
+            raise ValueError(
+                f"Malformed XML document or security policy violation: {e}\n"
+                f"Diagnostic Traceback:\n{tb}"
+            ) from e
+
         pages = []
 
         diagram_elements = root.findall("diagram")
@@ -38,7 +49,14 @@ class DrawIOParser:
             raw_text = diagram.text or ""
             if raw_text.strip():
                 decoded_xml = self._decode_diagram_text(raw_text.strip())
-                page_root = ET.fromstring(decoded_xml)
+                try:
+                    page_root = ET.fromstring(decoded_xml)
+                except (ET.ParseError, defusedxml.common.DefusedXmlException) as e:
+                    tb = traceback.format_exc()
+                    raise ValueError(
+                        f"Malformed diagram page XML in page '{page_name}' (id: '{page_id}'): {e}\n"
+                        f"Diagnostic Traceback:\n{tb}"
+                    ) from e
             else:
                 mx_model = diagram.find("mxGraphModel")
                 page_root = mx_model if mx_model is not None else diagram

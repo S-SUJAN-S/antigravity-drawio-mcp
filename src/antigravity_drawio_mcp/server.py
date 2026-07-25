@@ -10,55 +10,81 @@ from .verifier import DrawIOVerifier
 # Core tool function definitions
 def create_diagram(output_path: str, nodes: list, edges: list, page_name: str = "Page-1") -> str:
     """Create a new .drawio XML diagram file with nodes and edges."""
-    builder = DrawIOBuilder(page_name=page_name)
-    for n in nodes:
-        builder.add_node(
-            node_id=n.get("id"),
-            value=n.get("value", ""),
-            x=n.get("x", 100),
-            y=n.get("y", 100),
-            width=n.get("width", 140),
-            height=n.get("height", 60),
-            style=n.get("style", "rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;")
-        )
-    for e in edges:
-        builder.add_edge(
-            edge_id=e.get("id"),
-            source=e.get("source"),
-            target=e.get("target"),
-            label=e.get("label", e.get("value", "")),
-            style=e.get("style", "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;")
-        )
-    saved = builder.save(output_path)
-    return json.dumps({"status": "success", "path": saved})
+    try:
+        builder = DrawIOBuilder(page_name=page_name)
+        for n in nodes:
+            builder.add_node(
+                node_id=n.get("id"),
+                value=n.get("value", ""),
+                x=n.get("x", 100),
+                y=n.get("y", 100),
+                width=n.get("width", 140),
+                height=n.get("height", 60),
+                style=n.get("style", "rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;")
+            )
+        for e in edges:
+            builder.add_edge(
+                edge_id=e.get("id"),
+                source=e.get("source"),
+                target=e.get("target"),
+                label=e.get("label", e.get("value", "")),
+                style=e.get("style", "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;")
+            )
+        saved = builder.save(output_path)
+        return json.dumps({"status": "success", "path": saved})
+    except ValueError as e:
+        return json.dumps({"status": "error", "message": str(e)})
 
 def export_diagram(input_path: str, output_path: str, format: str = "png", page_index: int = 1) -> str:
     """Export a .drawio XML diagram to PNG, SVG, PDF, or JPEG using desktop CLI."""
-    res = DrawIOExporter.export(input_path, output_path, fmt=format, page_index=page_index)
-    return json.dumps({"status": "success", "exported_path": res})
+    try:
+        res = DrawIOExporter.export(input_path, output_path, fmt=format, page_index=page_index)
+        return json.dumps({"status": "success", "exported_path": res})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
 
 def open_in_drawio(input_path: str) -> str:
     """Open a .drawio diagram file directly in the local Draw.io Desktop GUI app."""
-    msg = DrawIOExporter.open_in_app(input_path)
-    return json.dumps({"status": "success", "message": msg})
+    try:
+        msg = DrawIOExporter.open_in_app(input_path)
+        return json.dumps({"status": "success", "message": msg})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
 
 def parse_diagram(input_path: str) -> str:
     """Parse a .drawio XML file and extract structured nodes, edges, and page metadata."""
-    parser = DrawIOParser(input_path)
-    parsed = parser.parse()
-    return json.dumps({"status": "success", "data": parsed})
+    try:
+        parser = DrawIOParser(input_path)
+        parsed = parser.parse()
+        return json.dumps({"status": "success", "data": parsed})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
 
 def convert_mermaid_to_drawio(mermaid_code: str, output_path: str) -> str:
     """Convert a Mermaid JS graph definition string into native .drawio XML."""
-    xml_res = MermaidToDrawIO.convert(mermaid_code)
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(xml_res)
-    return json.dumps({"status": "success", "path": output_path})
+    try:
+        xml_res = MermaidToDrawIO.convert(mermaid_code)
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(xml_res)
+        return json.dumps({"status": "success", "path": output_path})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
 
 def validate_diagram(input_path: str) -> str:
     """Audit a .drawio diagram file for node collisions and text boundary overflows."""
-    audit = DrawIOVerifier.verify(input_path)
-    return json.dumps({"status": "success", "audit": audit})
+    try:
+        audit = DrawIOVerifier.verify(input_path)
+        return json.dumps({"status": "success", "audit": audit})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
+
+def resolve_diagram_collisions(input_path: str, output_path: str = None) -> str:
+    """Auto-resolve node collisions in a .drawio diagram by shifting overlapping coordinates."""
+    try:
+        audit = DrawIOVerifier.auto_resolve(input_path, output_path=output_path)
+        return json.dumps({"status": "success", "audit": audit})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
 
 # Register with FastMCP if installed
 try:
@@ -75,6 +101,7 @@ if mcp_available:
     mcp.tool()(parse_diagram)
     mcp.tool()(convert_mermaid_to_drawio)
     mcp.tool()(validate_diagram)
+    mcp.tool()(resolve_diagram_collisions)
 
 def run_stdio_fallback():
     """StdIO JSON protocol fallback for non-FastMCP environments."""
@@ -87,7 +114,7 @@ def run_stdio_fallback():
             req_id = req.get("id")
             
             if method == "initialize":
-                res = {"jsonrpc": "2.0", "id": req_id, "result": {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "Antigravity Draw.io MCP Server", "version": "1.0.0"}}}
+                res = {"jsonrpc": "2.0", "id": req_id, "result": {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "Antigravity Draw.io MCP Server", "version": "1.0.6"}}}
             elif method == "tools/list":
                 res = {"jsonrpc": "2.0", "id": req_id, "result": {"tools": [
                     {"name": "create_diagram", "description": "Create a new .drawio XML diagram file"},
@@ -95,7 +122,8 @@ def run_stdio_fallback():
                     {"name": "open_in_drawio", "description": "Open .drawio in desktop GUI"},
                     {"name": "parse_diagram", "description": "Parse .drawio XML into JSON"},
                     {"name": "convert_mermaid_to_drawio", "description": "Convert Mermaid JS to .drawio"},
-                    {"name": "validate_diagram", "description": "Audit diagram for collisions & overflow"}
+                    {"name": "validate_diagram", "description": "Audit diagram for collisions & overflow"},
+                    {"name": "resolve_diagram_collisions", "description": "Auto-resolve node collisions in .drawio diagram"}
                 ]}}
             elif method == "tools/call":
                 params = req.get("params", {})
@@ -114,6 +142,8 @@ def run_stdio_fallback():
                     output = convert_mermaid_to_drawio(args["mermaid_code"], args["output_path"])
                 elif tool_name == "validate_diagram":
                     output = validate_diagram(args["input_path"])
+                elif tool_name == "resolve_diagram_collisions":
+                    output = resolve_diagram_collisions(args["input_path"], output_path=args.get("output_path"))
                 else:
                     output = json.dumps({"status": "error", "message": f"Unknown tool {tool_name}"})
                 

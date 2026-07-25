@@ -1,14 +1,7 @@
 {
   "mcpServers": {
-    "antigravity_drawio": {
-      "command": "python",
-      "args": [
-        "-m",
-        "antigravity_drawio_mcp.server"
-      ],
-      "env": {
-        "PYTHONPATH": "./src"
-      }
+    "drawio": {
+      "command": "antigravity-drawio-mcp"
     }
   }
 }

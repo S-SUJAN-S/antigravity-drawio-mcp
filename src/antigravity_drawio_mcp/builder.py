@@ -9,26 +9,41 @@ class DrawIOBuilder:
         self.height = height
         self.nodes = []
         self.edges = []
+        self.node_ids = set()
         
     def add_node(self, node_id, value, x, y, width=140, height=60, style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;"):
+        nid = str(node_id)
+        if nid in self.node_ids:
+            raise ValueError(f"Duplicate node_id '{nid}' already exists in diagram.")
+        
         self.nodes.append({
-            "id": str(node_id),
+            "id": nid,
             "value": str(value),
             "x": str(x), "y": str(y),
             "width": str(width), "height": str(height),
             "style": str(style)
         })
-        return str(node_id)
+        self.node_ids.add(nid)
+        return nid
         
     def add_edge(self, edge_id, source, target, label="", style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;"):
+        eid = str(edge_id)
+        src = str(source)
+        tgt = str(target)
+
+        if src not in self.node_ids:
+            raise ValueError(f"Dangling edge source '{src}' does not exist in diagram nodes.")
+        if tgt not in self.node_ids:
+            raise ValueError(f"Dangling edge target '{tgt}' does not exist in diagram nodes.")
+
         self.edges.append({
-            "id": str(edge_id),
-            "source": str(source),
-            "target": str(target),
+            "id": eid,
+            "source": src,
+            "target": tgt,
             "label": str(label),
             "style": str(style)
         })
-        return str(edge_id)
+        return eid
 
     def to_xml(self):
         mxfile = ET.Element("mxfile", {

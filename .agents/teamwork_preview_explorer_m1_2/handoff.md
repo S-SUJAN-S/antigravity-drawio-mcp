@@ -1,60 +1,38 @@
-# Handoff Report — Explorer 2 (AI/LLM GEO Specialist)
-
-**Milestone**: Milestone 1 (Keyword & AI SEO Discovery Audit)  
-**Agent Identity**: Explorer 2 (`teamwork_preview_explorer_m1_2`)  
-**Parent Agent**: `parent` (conversation ID: `78340fcc-a5ff-4ed5-8134-dc5b451abfc3`)  
-**Handoff Type**: Hard Handoff (Task Complete)  
-
----
+# Handoff Report: Exporter Cross-Platform Resolution (Milestone 1 - R2)
 
 ## 1. Observation
-
-- **Analyzed Source File**: `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/README.md` (197 lines).
-- **Existing Metadata**: Lines 15–19 contain a basic HTML comment (`<!-- AI Search & RAG Indexing Metadata -->`).
-- **Existing Key Features**: Lines 52–60 list 7 features, but lack explicit MCP client references (Google Antigravity, VS Code, Windsurf), C4 architecture keywords, or tool bindings.
-- **Existing FAQ**: Lines 171–182 contain only 3 basic Q&A pairs, omitting high-volume developer search intents regarding installation, multi-IDE integration, boundary validation, and headless export.
-- **Produced Output Artifacts**:
-  - `analysis.md` (in assigned directory): Complete GEO recommendations, AI Quick Context block, JSON-LD schema, search-indexed features, and expanded 8-question FAQ.
-  - `progress.md`: Liveness log.
-  - `BRIEFING.md`: Working memory index.
-  - `ORIGINAL_REQUEST.md`: Request log.
-
----
+- **File Examined**: `src/antigravity_drawio_mcp/exporter.py` (Lines 1 to 104)
+- **Observed Functions**:
+  - `get_drawio_executable()` (Lines 10–42): Uses `platform.system()` to resolve paths.
+    - macOS paths (Lines 20–24): `/Applications/draw.io.app/Contents/MacOS/draw.io`, `~/Applications/draw.io.app/Contents/MacOS/draw.io`.
+    - Linux paths (Lines 25–32): `/usr/bin/drawio`, `/usr/bin/draw.io`, `/opt/drawio/drawio`, `/snap/bin/drawio`, `/usr/local/bin/drawio`.
+    - System PATH fallback (Lines 38–40): `shutil.which("drawio") or shutil.which("draw.io")`.
+  - `_kill_running_instances()` (Lines 45–58):
+    - Windows (Line 50): `subprocess.run(["taskkill", "/IM", "draw.io.exe", "/F"], ...)`
+    - Unix/macOS/Linux (Lines 52–54): `subprocess.run(["pkill", "-f", "draw.io"], ...)` and `subprocess.run(["pkill", "-f", "drawio"], ...)`.
+  - `export()` (Lines 60–95): Attempts direct export first (Lines 82–84). If output is missing or 0 bytes, calls `_kill_running_instances()` (Line 87) and retries export (Line 91).
+- **Existing Test File**: `tests/test_mcp_server.py` (Lines 49–55): Contains `test_04_exporter_check()`.
 
 ## 2. Logic Chain
-
-1. **AI/LLM Retrieval Gap**: RAG vector embedders (e.g. OpenAI text-embedding-3, Cohere v3) chunk markdown files into 256-512 token windows. Without explicit entity binding (`antigravity-drawio-mcp`, `Draw.io`, `MCP Server`) in each block, retrieved chunks lose contextual coherence in LLM searches (Perplexity, ChatGPT Search, Claude RAG).
-2. **AI Quick Context Block**: Creating a visible `> 🤖 **AI System Prompt & Quick Context**` callout near the top of `README.md` delivers a self-contained summary chunk that guarantees LLM agents recognize package capabilities, CLI tools, and installation commands in a single retrieval step.
-3. **Structured Microdata**: Embedding standard `SoftwareApplication` and `FAQPage` JSON-LD schema inside markdown/HTML comments equips structured search crawlers and AI web engines with indexed entity relationships.
-4. **Developer Intent Alignment**: Developers searching conversational AI engines use long-tail queries ("convert mermaid to drawio ai", "best drawio mcp server cursor", "headless drawio export png cli"). Expanding the FAQ to 8 targeted Q&A pairs directly addresses these natural language intents for direct snippet extraction.
-
----
+1. *Observation*: `get_drawio_executable()` checks `possible_paths` before `shutil.which()`.
+   *Inference*: Reversing the lookup order to check `shutil.which("drawio") or shutil.which("draw.io")` first ensures that user-configured PATH binaries and custom wrappers take precedence over fixed system locations.
+2. *Observation*: `_kill_running_instances()` checks `platform.system() == "Windows"` to dispatch `taskkill /IM draw.io.exe /F`, and uses `pkill -f draw.io` / `pkill -f drawio` for non-Windows operating systems.
+   *Inference*: This cleanly satisfies cross-platform process termination while preventing command syntax errors on non-Windows platforms.
+3. *Observation*: In `export()`, `_kill_running_instances()` is invoked ONLY after Attempt 1 fails (Attempt 2 fallback).
+   *Inference*: Process termination is properly deferred until file locking or export failure occurs, preventing unnecessary process killing during standard export operations.
+4. *Observation*: `test_04_exporter_check` skips execution when Draw.io Desktop is not installed on headless CI systems.
+   *Inference*: Mock-based unit tests using `unittest.mock.patch` are required to test cross-platform resolution logic across macOS, Linux, and Windows in headless CI environments.
 
 ## 3. Caveats
-
-- Read-only investigation: No changes were made directly to `README.md` or any project source files. All proposals are in `analysis.md` for implementation in Milestone 2.
-- Testing local JSON-LD rendering depends on markdown renderer configuration; some plain Markdown parsers strip `<script>` tags, but GitHub rendered view and web docs engines (e.g., MkDocs/Jekyll/Gatsby) preserve them.
-
----
+- No caveats. Read-only analysis completed; actual source file modifications were not performed per task scope.
 
 ## 4. Conclusion
-
-The GEO discovery audit for `antigravity-drawio-mcp` is complete. Implementing the proposed **AI System Prompt & Quick Context Block**, **JSON-LD Microdata**, **8 Search-Indexed Feature Bullets**, and **8-Question Developer FAQ** in Milestone 2 will maximize repository visibility across Perplexity, ChatGPT Search, Claude Web RAG, and Google Antigravity.
-
-Key recommendations delivered in `analysis.md`:
-- Visible AI Quick Context block at top of `README.md`.
-- Invisible AI RAG Metadata chunk & `SoftwareApplication` / `FAQPage` JSON-LD schema.
-- 8 high-density feature bullet points with bold keyphrases.
-- 8 high-intent developer FAQ pairs optimized for snippet extraction.
-
----
+The implementation strategy for `src/antigravity_drawio_mcp/exporter.py` in Milestone 1 (R2 Exporter Cross-Platform Resolution) is fully formulated:
+1. Promote `shutil.which("drawio") or shutil.which("draw.io")` to the top of `get_drawio_executable()`, followed by platform-specific path checks for macOS (`/Applications/draw.io.app/Contents/MacOS/draw.io`), Linux (`/usr/bin/drawio`, `/opt/drawio/drawio`, etc.), and Windows.
+2. Maintain cross-platform process killing in `_kill_running_instances()` using `platform.system()` (`taskkill /IM draw.io.exe /F` on Windows; `pkill -f draw.io` on Unix/macOS/Linux), deferred until file locking occurs in `export()`.
 
 ## 5. Verification Method
-
-1. **Inspect Analysis Report**:
-   - File: `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/teamwork_preview_explorer_m1_2/analysis.md`
-   - Confirm presence of Section 2 (Quick Context Block), Section 3 (Feature Bullets), Section 4 (JSON-LD & FAQ), and Section 5 (Retrieval Architecture).
-2. **Schema & Syntax Validation**:
-   - Extract JSON-LD script from `analysis.md` Section 4.1 and validate with any standard JSON parser or Schema.org validator.
-3. **Unit Test Suite Integrity**:
-   - Run project tests: `python -m unittest tests/test_mcp_server.py` to confirm zero side effects on repository code.
+1. **Source Inspection**: Inspect `src/antigravity_drawio_mcp/exporter.py` lines 10–58 against `analysis.md`.
+2. **Unit Tests**: Run pytest / unittest:
+   `python -m unittest tests/test_mcp_server.py`
+3. **Mock Tests Verification**: Add and run mock unit tests in `tests/test_mcp_server.py` or `tests/test_exporter.py` targeting Windows, Darwin, and Linux execution paths under `unittest.mock`.

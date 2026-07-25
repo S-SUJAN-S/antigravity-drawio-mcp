@@ -114,7 +114,7 @@ def run_stdio_fallback():
             req_id = req.get("id")
             
             if method == "initialize":
-                res = {"jsonrpc": "2.0", "id": req_id, "result": {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "Antigravity Draw.io MCP Server", "version": "1.1.1"}}}
+                res = {"jsonrpc": "2.0", "id": req_id, "result": {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "Antigravity Draw.io MCP Server", "version": "1.1.2"}}}
             elif method == "tools/list":
                 res = {"jsonrpc": "2.0", "id": req_id, "result": {"tools": [
                     {"name": "create_diagram", "description": "Create a new .drawio XML diagram file"},

@@ -9,7 +9,7 @@ Execute a comprehensive code refactor and feature enhancement for `antigravity-d
 | 1 | M1: Security & Process Safety | Parser `defusedxml` conversion, narrowed decoding exceptions, exporter cross-platform resolution (macOS, Linux, PATH) & process handling | None | DONE |
 | 2 | M2: Mermaid Converter & Layout Engine | Mermaid shape syntax (`{rhombus}`, `(rounded)`), multi-hop lines (`A-->B-->C`), `subgraph` support, topological depth calculation (`x = depth * 250`) | None | DONE |
 | 3 | M3: Builder Validation & Auto-Collision Tool | `builder.py` duplicate node ID validation & dangling edge detection, `verifier.py` `auto_resolve()` implementation, `resolve_diagram_collisions` MCP tool | M1, M2 | DONE |
-| 4 | M4: Comprehensive Test Suite, Version Bump & Release Prep | Expand `tests/test_mcp_server.py` (XXE, compressed XML, error paths, all 7 MCP tool wrappers, validation), unit test verification, version bump, sdist/wheel build, git tag, PyPI release prep | M1, M2, M3 | PLANNED |
+| 4 | M4: Comprehensive Test Suite, Version Bump & Release Prep | Expand `tests/test_mcp_server.py` (XXE, compressed XML, error paths, all 7 MCP tool wrappers, validation), unit test verification, version bump, sdist/wheel build, git tag, PyPI release prep | M1, M2, M3 | DONE |
 
 ## Interface Contracts & Standards
 - `parser.py`: Use `defusedxml.ElementTree.fromstring` for XML parsing. Exception handling in `_decode_diagram_text` must be narrowed to `(binascii.Error, zlib.error, UnicodeDecodeError)`.

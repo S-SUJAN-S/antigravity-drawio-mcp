@@ -34,6 +34,8 @@ TRIPLES:
 - (antigravity-drawio-mcp, generates, Architecture Diagram AI)
 -->
 
+<!-- Structured Schema.org Microdata for Search Indexing -->
+<!--
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -46,7 +48,7 @@ TRIPLES:
       "description": "Production-grade Model Context Protocol (MCP) server for automating Draw.io diagrams, C4 architecture models, and flowcharts using AI assistants like Google Antigravity, Claude Code, Cursor IDE, and VS Code.",
       "operatingSystem": "Windows, macOS, Linux",
       "applicationCategory": "DeveloperApplication",
-      "softwareVersion": "1.0.5",
+      "softwareVersion": "1.1.2",
       "license": "https://opensource.org/licenses/MIT",
       "url": "https://pypi.org/project/antigravity-drawio-mcp/",
       "downloadUrl": "https://pypi.org/project/antigravity-drawio-mcp/#files",
@@ -130,6 +132,7 @@ TRIPLES:
   ]
 }
 </script>
+-->
 
 ---
 

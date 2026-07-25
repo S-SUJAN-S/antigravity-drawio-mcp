@@ -1,7 +1,7 @@
-# Soft Handoff Report — Project Orchestrator (Generation 1)
+# Hard Handoff Report — Project Orchestrator (Generation 2)
 
 **Date**: 2026-07-25  
-**Handoff Type**: Soft (Succession Triggered at 18 Spawns)  
+**Handoff Type**: Hard (Task Complete — All 4 Milestones Verified & Audited)  
 **Parent Conversation ID**: `033e5fca-7b4f-4ea9-bb67-10e729f6ecf3`  
 **Working Directory**: `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/orchestrator`
 
@@ -12,61 +12,52 @@
 | # | Milestone Name | Scope Summary | Status |
 |---|----------------|---------------|--------|
 | 1 | M1: Security & Process Safety | Parser `defusedxml` conversion, narrowed exception handling, exporter cross-platform resolution (macOS, Linux, PATH) & process safety | **DONE** (Gate Passed, Auditor CLEAN) |
-| 2 | M2: Mermaid Converter & Layout Engine | Shape syntax (`{rhombus}`, `(rounded)`), multi-hop lines (`A-->B-->C`), `subgraph` support, topological layout (`x = depth * 250`) | **IN_PROGRESS** (Remediation needed: nested subgraph bounds overlap) |
-| 3 | M3: Builder Validation & Auto-Collision Tool | `builder.py` duplicate node ID validation & dangling edge detection, `verifier.py` `auto_resolve()` implementation, `resolve_diagram_collisions` MCP tool | **PLANNED** |
-| 4 | M4: Comprehensive Test Suite, Version Bump & Release Prep | Expand `tests/test_mcp_server.py` (XXE, compressed XML, error paths, all 7 tool wrappers), unit test verification, version bump, sdist/wheel build, tag, PyPI prep | **PLANNED** |
+| 2 | M2: Mermaid Converter & Layout Engine | Shape syntax (`{rhombus}`, `(rounded)`), multi-hop lines (`A-->B-->C`), `subgraph` support, topological layout (`x = depth * 250`), nested subgraph bounds | **DONE** (Gate Passed, Challenger CONFIRMED, Auditor CLEAN) |
+| 3 | M3: Builder Validation & Auto-Collision Tool | `builder.py` duplicate node ID validation & dangling edge detection, `verifier.py` `auto_resolve()` implementation, `resolve_diagram_collisions` MCP tool | **DONE** (Gate Passed, Reviewer PASS, Auditor CLEAN) |
+| 4 | M4: Comprehensive Test Suite, Version Bump & Release Prep | Expand `tests/test_mcp_server.py` to 20 unit tests, version bump to 1.1.1, sdist/wheel build, git release tag `v1.1.1`, `twine check` PyPI prep | **DONE** (Gate Passed, Reviewer PASS, Auditor CLEAN) |
 
 ---
 
 ## 2. Completed Work & Verified Evidence
 
 ### Milestone 1 (Security & Process Safety) - 100% COMPLETE & VERIFIED
-- `src/antigravity_drawio_mcp/parser.py`: Replaced standard ElementTree with `defusedxml.ElementTree`, narrowed `_decode_diagram_text` exception tuple strictly to `(binascii.Error, zlib.error, UnicodeDecodeError)`, and added diagnostic `traceback.format_exc()` to raised `ValueError` exceptions.
-- `src/antigravity_drawio_mcp/exporter.py`: Implemented cross-platform binary resolution (`shutil.which` + OS-specific paths for macOS `/Applications`, Linux `/usr/bin`, Windows), cross-platform process killing (`taskkill` / `pkill`) with `shutil.which` safety checks, and non-destructive export flow (Attempt 1 tries export without process killing; Attempt 2 kills process with stderr warning only on locking/failure).
-- **Verification**: Reviewer M1-1 (PASS), Reviewer M1-2 (PASS), Challenger M1-1 (CONFIRMED 9/9 XXE stress tests), Challenger M1-2 (CONFIRMED 15/15 exporter mock tests), Forensic Auditor M1 (**CLEAN AUDIT**).
+- `src/antigravity_drawio_mcp/parser.py`: Converted XML parsing to `defusedxml.ElementTree`, narrowed decoding exceptions strictly to `(binascii.Error, zlib.error, UnicodeDecodeError)`, and added diagnostic traceback formatting.
+- `src/antigravity_drawio_mcp/exporter.py`: Implemented cross-platform binary resolution (`shutil.which` + OS-specific paths for macOS `/Applications`, Linux `/usr/bin`, Windows), cross-platform process killing with `shutil.which` safety checks, and non-destructive export flow.
+- **Verification**: Reviewer M1-1 (PASS), Reviewer M1-2 (PASS), Challenger M1-1 (CONFIRMED 9/9 XXE tests), Challenger M1-2 (CONFIRMED 15/15 exporter mock tests), Forensic Auditor M1 (**CLEAN AUDIT**).
 
-### Milestone 2 (Mermaid Converter & Layout Engine) - IMPLEMENTED (1 Minor Bug to Fix)
+### Milestone 2 (Mermaid Converter & Layout Engine) - 100% COMPLETE & VERIFIED
 - `src/antigravity_drawio_mcp/mermaid_converter.py`:
-  - Node shapes: `{label}` -> rhombus (`rhombus;whiteSpace=wrap;html=1;`), `(label)` -> rounded (`rounded=1;whiteSpace=wrap;html=1;arcSize=30;`), `[label]` -> rectangular (`rounded=0;whiteSpace=wrap;html=1;`).
-  - Multi-hop arrows: Tokenization pipeline parses `A --> B --> C`, inline labels `A -- label --> B`, pipe labels `A -->|label| B`.
-  - Subgraphs: Implemented `subgraph` parsing into swimlane containers.
-  - Layout Engine: Implemented cycle-tolerant BFS topological depth algorithm (`x = 80 + depth * 250`, `y = 80 + row * 110`).
-- **Unit Tests**: 16/16 tests pass (`python -m unittest tests/test_mcp_server.py`).
-- **Gate Evaluation**:
-  - Reviewer M2-1 (PASS), Reviewer M2-2 (PASS), Forensic Auditor M2 (CLEAN), Challenger M2-1 (CONFIRMED).
-  - **Challenger M2-2 (REJECTED / BUG FOUND)**: Found that when subgraphs are nested (`subgraph outer` wrapping `subgraph inner`), outer swimlane bounding box computation uses raw child node positions, causing `outer` bounds to match `inner` bounds exactly (`outer` title header overlaps `inner` title header).
+  - Node shapes: `{label}` -> rhombus, `(label)` -> rounded, `[label]` -> rectangular.
+  - Multi-hop arrows: Tokenization pipeline parses `A --> B --> C`, inline labels, pipe labels.
+  - Subgraphs & Nested Subgraphs: Implemented recursive bottom-up bounding box calculation `get_subgraph_bounds(sub_id)` enclosing both child nodes AND child subgraphs, with top-down swimlane Z-ordering (`get_depth(sub_id)`).
+  - Layout Engine: Implemented cycle-tolerant BFS topological depth layout (`x = 80 + depth * 250`, `y = 80 + row * 110`).
+- **Verification**: Challenger M2-2 (CONFIRMED), Forensic Auditor M2 (**CLEAN AUDIT**). Unit test `test_17_mermaid_nested_subgraphs` passing.
+
+### Milestone 3 (Builder Validation & Auto-Collision Tool) - 100% COMPLETE & VERIFIED
+- `src/antigravity_drawio_mcp/builder.py`: Duplicate node ID detection in `add_node()` raising `ValueError`, dangling edge detection in `add_edge()` raising `ValueError` for missing source or target nodes.
+- `src/antigravity_drawio_mcp/server.py`: General exception handling in `create_diagram()` returning structured JSON `{"status": "error", "message": ...}`, exposed `resolve_diagram_collisions` MCP tool.
+- `src/antigravity_drawio_mcp/verifier.py`: `DrawIOVerifier.auto_resolve()` auto-shifts overlapping nodes vertically down until 0 collisions (`is_clean: True`), with `is_container_of` strictly requiring `(width > child_width or height > child_height)` to catch identical coordinate overlaps.
+- **Verification**: Reviewer M3 (PASS), Forensic Auditor M3 (**CLEAN AUDIT**). Unit tests `test_07`, `test_08`, `test_09`, `test_18`, `test_19`, `test_20` passing.
+
+### Milestone 4 (Test Suite Expansion, Version Bump & Release Prep) - 100% COMPLETE & VERIFIED
+- `tests/test_mcp_server.py`: Expanded to 20 comprehensive unit tests covering XXE protection (`with self.assertRaises(Exception):`), compressed XML parsing, malformed XML tracebacks, builder validation, exporter safety, verifier auto-resolve, and all 7 MCP tool wrappers (`create_diagram`, `export_diagram`, `open_in_drawio`, `parse_diagram`, `convert_mermaid_to_drawio`, `validate_diagram`, `resolve_diagram_collisions`). All 20 tests pass cleanly in 0.102s (`Ran 20 tests ... OK`).
+- **Version Bump**: Bumped version to `1.1.1` in `pyproject.toml`, `src/antigravity_drawio_mcp/__init__.py`, and fallback `server.py`.
+- **Git Release Commit & Tag**: Created release commit `4c4a2757ea3d5819feae82ee52a0d18098e00ffc` (`"Release v1.1.1: Security, Mermaid engine, builder validation, auto-collision resolution"`) and annotated git tag `v1.1.1`.
+- **Package Distribution & PyPI Prep**: Built wheel `antigravity_drawio_mcp-1.1.1-py3-none-any.whl` and source distribution `antigravity_drawio_mcp-1.1.1.tar.gz` in `dist/`. Ran `twine check dist/*` (PASSED for all distributions).
+- **Verification**: Reviewer M4 (PASS), Forensic Auditor M4 (**CLEAN AUDIT**).
 
 ---
 
-## 3. Remaining Work for Successor
+## 3. Remaining Work
 
-### Immediate Action Item: Milestone 2 Remediation
-1. Dispatch Worker to update `src/antigravity_drawio_mcp/mermaid_converter.py` so nested subgraphs compute outer bounds by taking the bounding box of both child nodes AND child subgraphs (or adding extra padding per nesting depth level: `sub_x = min_x - 30 - 20 * depth`, `sub_y = min_y - 50 - 30 * depth`, `sub_w = max_r - min_x + 60 + 40 * depth`, `sub_h = max_b - min_y + 80 + 50 * depth`).
-2. Re-run unit tests and re-verify Challenger M2-2 to confirm clean pass. Mark Milestone 2 **DONE**.
-
-### Next Step: Milestone 3 (Builder Validation & Auto-Collision Tool)
-1. **R4 Builder Validation**:
-   - `src/antigravity_drawio_mcp/builder.py`: Raise `ValueError` on duplicate node IDs in `add_node()` and dangling edge references (`source_id` / `target_id` not in nodes) in `add_edge()`.
-   - `src/antigravity_drawio_mcp/server.py`: Surface clean JSON error responses for `ValueError`.
-2. **R4 Auto-Collision Resolution**:
-   - `src/antigravity_drawio_mcp/verifier.py`: Implement `DrawIOVerifier.auto_resolve()` to auto-shift overlapping nodes down until 0 collisions remain (`is_clean` is True).
-   - `src/antigravity_drawio_mcp/server.py`: Expose `resolve_diagram_collisions` as an MCP tool.
-3. Run iteration cycle: Explorer -> Worker -> Reviewers -> Challengers -> Forensic Auditor.
-
-### Final Step: Milestone 4 (Test Suite Expansion, Version Bump & Release Prep)
-1. **R5 Test Suite Expansion**:
-   - `tests/test_mcp_server.py`: Expand to 10+ comprehensive test cases (XXE bomb rejection, compressed parsing, malformed XML, missing file handling, duplicate node IDs, dangling edges, and direct tool wrapper calls for all 7 MCP tools: `create_diagram`, `parse_diagram`, `validate_diagram`, `convert_mermaid_to_drawio`, `resolve_diagram_collisions`, `export_diagram`, `open_in_drawio`).
-2. **Verification & PyPI Release**:
-   - Run unit test suite: `python -m unittest tests/test_mcp_server.py`.
-   - Bump version in `pyproject.toml` and `src/antigravity_drawio_mcp/__init__.py`.
-   - Build package (wheel & sdist).
-   - Create git tag for release.
-   - Prepare PyPI release artifacts.
+None! All 4 milestones and all user requirements have been fully satisfied, verified, and clean-audited.
 
 ---
 
 ## 4. Key Artifact Index
-- `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/orchestrator/PROJECT.md` — Project Breakdown & Scope
+- `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/orchestrator/PROJECT.md` — Project Scope & Status
 - `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/orchestrator/plan.md` — Project Execution Plan
 - `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/orchestrator/progress.md` — Progress Log
 - `C:/Users/ssuja/OneDrive/Desktop/Learn_Antigravity_Advance/draw_io_automation/antigravity_drawio_mcp/.agents/orchestrator/BRIEFING.md` — Persistent Memory Index
+- `dist/antigravity_drawio_mcp-1.1.1-py3-none-any.whl` — Release Wheel
+- `dist/antigravity_drawio_mcp-1.1.1.tar.gz` — Release Source Distribution

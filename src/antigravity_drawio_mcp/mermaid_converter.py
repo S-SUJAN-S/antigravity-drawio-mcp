@@ -73,7 +73,8 @@ class MermaidToDrawIO:
                     if re.match(r'^[\w\-]+$', raw_val):
                         sub_id = raw_val
                     else:
-                        sub_id = f"sub_{re.sub(r'\\W+', '_', raw_val)}"
+                        sanitized_val = re.sub(r'\W+', '_', raw_val)
+                        sub_id = f"sub_{sanitized_val}"
                     parent_id = subgraph_stack[-1]["id"] if subgraph_stack else None
                     sub_data = {
                         "id": sub_id,

@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<mxfile host="Electron" modified="2026-09-05T18:25:27.187484+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+  <diagram id="diagram_1" name="Architecture Diagram">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="1">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="cloud_vpc" value="AWS Production VPC" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;startSize=28;fillColor=#F9FAFB;strokeColor=#7D8998;strokeWidth=1.5;fontColor=#232F3E;fontStyle=1;fontSize=12;align=left;" vertex="1" parent="1">
+          <mxGeometry x="50.0" y="225.0" width="220.0" height="555.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="gw" value="API Gateway v2" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#EDF5ED;strokeColor=#277116;strokeWidth=1.5;fontColor=#1B660F;fontFamily=Helvetica;fontSize=12;fillColor=#00F0FF;strokeColor=#FF007F;strokeWidth=2.5;" vertex="1" parent="1">
+          <mxGeometry x="80.0" y="290.0" width="150.0" height="65.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="svc" value="Order Service" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFF5EA;strokeColor=#EC7211;strokeWidth=1.5;fontColor=#232F3E;fontFamily=Helvetica;fontSize=12;strokeColor=#FF007F;strokeWidth=2.5;" vertex="1" parent="1">
+          <mxGeometry x="80.0" y="485.0" width="150.0" height="65.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="db" value="PostgreSQL DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#F3EBF9;strokeColor=#8C4FFF;strokeWidth=1.5;fontColor=#3C1053;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80.0" y="680.0" width="160.0" height="70.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="redis_cache" value="Redis Cache" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#EEF2F6;strokeColor=#334155;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12;strokeColor=#FF007F;strokeWidth=2.5;" vertex="1" parent="1">
+          <mxGeometry x="200.0" y="200.0" width="150.0" height="65.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_gw_svc_2" value="gRPC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#232F3E;strokeWidth=1.5;strokeColor=#FF007F;strokeWidth=2.5;" edge="1" parent="1" source="gw" target="svc">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_svc_db_3" value="SQL" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#232F3E;strokeWidth=1.5;" edge="1" parent="1" source="svc" target="db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_svc_redis_cache" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#475569;strokeWidth=1.5;strokeColor=#FF007F;strokeWidth=2.5;" edge="1" parent="1" source="svc" target="redis_cache">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_redis_cache_db" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#475569;strokeWidth=1.5;" edge="1" parent="1" source="redis_cache" target="db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

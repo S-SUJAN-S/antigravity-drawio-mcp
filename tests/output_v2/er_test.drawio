@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<mxfile host="Electron" modified="2026-09-05T18:25:27.165648+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+  <diagram id="diagram_1" name="Shop DB Schema">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="1">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="users" value="&lt;table style='width:100%; border-collapse:collapse;'&gt;&lt;tr&gt;&lt;td style='background:#334155; color:#ffffff; padding:4px; text-align:center;'&gt;&lt;b&gt;users&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style='padding:6px; background:#F8FAFC; text-align:left;'&gt;&lt;b&gt;[PK]&lt;/b&gt; id : &lt;small&gt;INT&lt;/small&gt;&lt;br/&gt;username : &lt;small&gt;VARCHAR(50)&lt;/small&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EEF2F6;strokeColor=#334155;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80.0" y="80.0" width="190.0" height="85.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="orders" value="&lt;table style='width:100%; border-collapse:collapse;'&gt;&lt;tr&gt;&lt;td style='background:#334155; color:#ffffff; padding:4px; text-align:center;'&gt;&lt;b&gt;orders&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style='padding:6px; background:#F8FAFC; text-align:left;'&gt;&lt;b&gt;[PK]&lt;/b&gt; id : &lt;small&gt;INT&lt;/small&gt;&lt;br/&gt;&lt;i&gt;[FK]&lt;/i&gt; user_id : &lt;small&gt;INT&lt;/small&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EEF2F6;strokeColor=#334155;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="400.0" y="80.0" width="190.0" height="85.0" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_users_orders_1" value="places (1:N)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#475569;strokeWidth=1.5;" edge="1" parent="1" source="users" target="orders">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

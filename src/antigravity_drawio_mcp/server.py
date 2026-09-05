@@ -6,10 +6,89 @@ from .parser import DrawIOParser
 from .exporter import DrawIOExporter
 from .mermaid_converter import MermaidToDrawIO
 from .verifier import DrawIOVerifier
+from .templates import (
+    generate_smart_diagram as _generate_smart_diagram,
+    generate_c4_diagram as _generate_c4_diagram,
+    generate_er_diagram as _generate_er_diagram,
+    generate_sequence_diagram as _generate_sequence_diagram
+)
+from .editor import DiagramEditor
+from .analyzer import DiagramAnalyzer
 
-# Core tool function definitions
+# ============================================================================
+# Advanced Declarative & Generative Tools (v2.0)
+# ============================================================================
+
+def generate_smart_diagram(output_path: str, nodes: list, edges: list, containers: list = None, layout_direction: str = "TB", theme: str = "modern_slate", title: str = "Architecture Diagram") -> str:
+    """Generate a professionally themed, auto-laid-out diagram without calculating manual pixel coordinates."""
+    try:
+        res = _generate_smart_diagram(
+            output_path=output_path,
+            nodes=nodes,
+            edges=edges,
+            containers=containers,
+            layout_direction=layout_direction,
+            theme=theme,
+            title=title
+        )
+        return json.dumps({"status": "success", "path": res})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
+
+def generate_c4_diagram(output_path: str, spec: dict) -> str:
+    """Generate an official C4 architecture diagram (Context, Container, or Component view) with actors, systems, and boundaries."""
+    try:
+        res = _generate_c4_diagram(output_path=output_path, spec=spec)
+        return json.dumps({"status": "success", "path": res})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
+
+def generate_er_diagram(output_path: str, spec: dict) -> str:
+    """Generate a relational database ER schema diagram with tables, primary/foreign keys, types, and cardinalities."""
+    try:
+        res = _generate_er_diagram(output_path=output_path, spec=spec)
+        return json.dumps({"status": "success", "path": res})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
+
+def generate_sequence_diagram(output_path: str, spec: dict) -> str:
+    """Generate a UML sequence diagram with lifelines, sync/async call arrows, and return messages."""
+    try:
+        res = _generate_sequence_diagram(output_path=output_path, spec=spec)
+        return json.dumps({"status": "success", "path": res})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
+
+def patch_diagram(drawio_path: str, operations: list, output_path: str = None) -> str:
+    """Surgically patch an existing diagram: add/delete/update nodes, rewire edges, group into containers, or highlight paths."""
+    try:
+        res = DiagramEditor.patch(drawio_path=drawio_path, operations=operations, output_path=output_path)
+        return json.dumps({"status": "success", "result": res})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
+
+def beautify_diagram(input_path: str, output_path: str = None, theme: str = "modern_slate", layout_direction: str = "TB") -> str:
+    """Beautify any existing diagram by running topological auto-layout, resolving overlapping links, and applying modern themes."""
+    try:
+        res = DiagramEditor.beautify(drawio_path=input_path, output_path=output_path, theme=theme, layout_direction=layout_direction)
+        return json.dumps({"status": "success", "result": res})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
+
+def analyze_diagram(input_path: str) -> str:
+    """Analyze diagram topology: extracts entry points, sinks, feedback cycles, bottlenecks, and critical execution paths."""
+    try:
+        metrics = DiagramAnalyzer.analyze(drawio_path=input_path)
+        return json.dumps({"status": "success", "metrics": metrics})
+    except Exception as e:
+        return json.dumps({"status": "error", "message": str(e)})
+
+# ============================================================================
+# Core & Utility Tools (v1.x Backward Compatible)
+# ============================================================================
+
 def create_diagram(output_path: str, nodes: list, edges: list, page_name: str = "Page-1") -> str:
-    """Create a new .drawio XML diagram file with nodes and edges."""
+    """Create a new .drawio XML diagram file with nodes and edges at specified coordinates."""
     try:
         builder = DrawIOBuilder(page_name=page_name)
         for n in nodes:
@@ -86,18 +165,19 @@ def resolve_diagram_collisions(input_path: str, output_path: str = None) -> str:
     except Exception as e:
         return json.dumps({"status": "error", "message": str(e)})
 
-# Register with FastMCP / MCPServer across both mcp 1.x and 2.x
+# ============================================================================
+# MCP Server Registration across mcp 1.x and 2.x
+# ============================================================================
+
 mcp_available = False
 mcp = None
 
 try:
-    # mcp >= 2.0.0
     from mcp.server.mcpserver import MCPServer as FastMCP
     mcp = FastMCP("Antigravity Draw.io MCP Server")
     mcp_available = True
 except (ImportError, ModuleNotFoundError):
     try:
-        # mcp < 2.0.0
         from mcp.server.fastmcp import FastMCP
         mcp = FastMCP("Antigravity Draw.io MCP Server")
         mcp_available = True
@@ -105,6 +185,13 @@ except (ImportError, ModuleNotFoundError):
         mcp_available = False
 
 if mcp_available and mcp is not None:
+    mcp.tool()(generate_smart_diagram)
+    mcp.tool()(generate_c4_diagram)
+    mcp.tool()(generate_er_diagram)
+    mcp.tool()(generate_sequence_diagram)
+    mcp.tool()(patch_diagram)
+    mcp.tool()(beautify_diagram)
+    mcp.tool()(analyze_diagram)
     mcp.tool()(create_diagram)
     mcp.tool()(export_diagram)
     mcp.tool()(open_in_drawio)
@@ -113,17 +200,111 @@ if mcp_available and mcp is not None:
     mcp.tool()(validate_diagram)
     mcp.tool()(resolve_diagram_collisions)
 
-# Standard MCP 2024-11-05 Tool Schemas for fallback
+# ============================================================================
+# Fallback Tool Schemas (14 Tools, MCP 2024-11-05 Specification)
+# ============================================================================
+
 FALLBACK_TOOLS = [
     {
-        "name": "create_diagram",
-        "description": "Create a new .drawio XML diagram file with nodes and edges.",
+        "name": "generate_smart_diagram",
+        "description": "Generate a professionally themed, auto-laid-out diagram without calculating manual pixel coordinates.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "output_path": {"type": "string", "description": "Output path for the .drawio file"},
+                "nodes": {"type": "array", "items": {"type": "object"}, "description": "List of node dicts with id, label, shape, role, group"},
+                "edges": {"type": "array", "items": {"type": "object"}, "description": "List of edge dicts with source, target, label, style"},
+                "containers": {"type": "array", "items": {"type": "object"}, "description": "Optional list of container swimlane dicts with id, title"},
+                "layout_direction": {"type": "string", "default": "TB", "description": "Layout direction: TB, LR, BT, RL, or grid"},
+                "theme": {"type": "string", "default": "modern_slate", "description": "Design theme: modern_slate, cyberpunk_dark, cloud_aws, cloud_gcp, cloud_azure, c4_model, ocean_breeze, monochrome"},
+                "title": {"type": "string", "default": "Architecture Diagram", "description": "Title of the diagram page"}
+            },
+            "required": ["output_path", "nodes", "edges"]
+        }
+    },
+    {
+        "name": "generate_c4_diagram",
+        "description": "Generate an official C4 architecture diagram (Context, Container, or Component view) with actors, systems, and boundaries.",
         "inputSchema": {
             "type": "object",
             "properties": {
                 "output_path": {"type": "string", "description": "Output path for .drawio file"},
-                "nodes": {"type": "array", "items": {"type": "object"}, "description": "List of node definitions"},
-                "edges": {"type": "array", "items": {"type": "object"}, "description": "List of edge definitions"},
+                "spec": {"type": "object", "description": "C4 architecture specification (people, systems, containers, components, boundaries, relations)"}
+            },
+            "required": ["output_path", "spec"]
+        }
+    },
+    {
+        "name": "generate_er_diagram",
+        "description": "Generate a relational database ER schema diagram with tables, primary/foreign keys, types, and cardinalities.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "output_path": {"type": "string", "description": "Output path for .drawio file"},
+                "spec": {"type": "object", "description": "ER schema specification (entities with fields and relationships)"}
+            },
+            "required": ["output_path", "spec"]
+        }
+    },
+    {
+        "name": "generate_sequence_diagram",
+        "description": "Generate a UML sequence diagram with lifelines, sync/async call arrows, and return messages.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "output_path": {"type": "string", "description": "Output path for .drawio file"},
+                "spec": {"type": "object", "description": "Sequence specification (participants, messages)"}
+            },
+            "required": ["output_path", "spec"]
+        }
+    },
+    {
+        "name": "patch_diagram",
+        "description": "Surgically patch an existing diagram: add/delete/update nodes, rewire edges, group into containers, or highlight paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "drawio_path": {"type": "string", "description": "Path to input .drawio diagram file"},
+                "operations": {"type": "array", "items": {"type": "object"}, "description": "List of patch operations: add_node, delete_node, update_node, add_edge, delete_edge, group_nodes, highlight_path"},
+                "output_path": {"type": "string", "description": "Optional destination path (overwrites drawio_path if omitted)"}
+            },
+            "required": ["drawio_path", "operations"]
+        }
+    },
+    {
+        "name": "beautify_diagram",
+        "description": "Beautify any existing diagram by running topological auto-layout, resolving overlapping links, and applying modern themes.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "input_path": {"type": "string", "description": "Path to messy or legacy .drawio file"},
+                "output_path": {"type": "string", "description": "Optional output path"},
+                "theme": {"type": "string", "default": "modern_slate", "description": "Theme palette name"},
+                "layout_direction": {"type": "string", "default": "TB", "description": "Layout direction: TB or LR"}
+            },
+            "required": ["input_path"]
+        }
+    },
+    {
+        "name": "analyze_diagram",
+        "description": "Analyze diagram topology: extracts entry points, sinks, feedback cycles, bottlenecks, and critical execution paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "input_path": {"type": "string", "description": "Path to .drawio file to analyze"}
+            },
+            "required": ["input_path"]
+        }
+    },
+    {
+        "name": "create_diagram",
+        "description": "Create a new .drawio XML diagram file with nodes and edges at specified coordinates.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "output_path": {"type": "string", "description": "Output path for .drawio file"},
+                "nodes": {"type": "array", "items": {"type": "object"}, "description": "List of node definitions with x, y, width, height"},
+                "edges": {"type": "array", "items": {"type": "object"}, "description": "List of edge definitions with source, target"},
                 "page_name": {"type": "string", "default": "Page-1", "description": "Page name"}
             },
             "required": ["output_path", "nodes", "edges"]
@@ -212,7 +393,7 @@ def run_stdio_fallback():
             method = req.get("method")
             req_id = req.get("id")
 
-            # Ignore notifications (no id)
+            # Ignore notifications
             if req_id is None or (method and method.startswith("notifications/")):
                 continue
 
@@ -227,7 +408,7 @@ def run_stdio_fallback():
                         },
                         "serverInfo": {
                             "name": "Antigravity Draw.io MCP Server",
-                            "version": "1.1.4"
+                            "version": "2.0.0"
                         }
                     }
                 }
@@ -246,7 +427,29 @@ def run_stdio_fallback():
                 tool_name = params.get("name")
                 args = params.get("arguments", {})
 
-                if tool_name == "create_diagram":
+                if tool_name == "generate_smart_diagram":
+                    output = generate_smart_diagram(
+                        output_path=args["output_path"],
+                        nodes=args["nodes"],
+                        edges=args["edges"],
+                        containers=args.get("containers"),
+                        layout_direction=args.get("layout_direction", "TB"),
+                        theme=args.get("theme", "modern_slate"),
+                        title=args.get("title", "Architecture Diagram")
+                    )
+                elif tool_name == "generate_c4_diagram":
+                    output = generate_c4_diagram(args["output_path"], args["spec"])
+                elif tool_name == "generate_er_diagram":
+                    output = generate_er_diagram(args["output_path"], args["spec"])
+                elif tool_name == "generate_sequence_diagram":
+                    output = generate_sequence_diagram(args["output_path"], args["spec"])
+                elif tool_name == "patch_diagram":
+                    output = patch_diagram(args["drawio_path"], args["operations"], output_path=args.get("output_path"))
+                elif tool_name == "beautify_diagram":
+                    output = beautify_diagram(args["input_path"], output_path=args.get("output_path"), theme=args.get("theme", "modern_slate"), layout_direction=args.get("layout_direction", "TB"))
+                elif tool_name == "analyze_diagram":
+                    output = analyze_diagram(args["input_path"])
+                elif tool_name == "create_diagram":
                     output = create_diagram(args["output_path"], args.get("nodes", []), args.get("edges", []), args.get("page_name", "Page-1"))
                 elif tool_name == "export_diagram":
                     output = export_diagram(args["input_path"], args["output_path"], format=args.get("format", "png"), page_index=args.get("page_index", 1))

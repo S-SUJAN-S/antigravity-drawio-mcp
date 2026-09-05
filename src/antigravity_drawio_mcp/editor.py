@@ -70,18 +70,27 @@ class DiagramEditor:
                     "width": w, "height": h, "style": style
                 }
 
-                # Auto-connect edges
+                # Auto-connect edges with collision-free anchor routing
                 if conn_from and conn_from in nodes_dict:
+                    src_n = nodes_dict[conn_from]
+                    edge_style = get_edge_style()
+                    if x > src_n["x"] + src_n["width"]:
+                        edge_style += "exitX=1;exitY=0.5;entryX=0.5;entryY=0;"
                     edges_list.append({
                         "id": f"e_{conn_from}_{nid}", "source": conn_from, "target": nid,
                         "value": op_info.get("edge_label", ""),
-                        "style": get_edge_style()
+                        "style": edge_style
                     })
                 if conn_to and conn_to in nodes_dict:
+                    tgt_n = nodes_dict[conn_to]
+                    edge_style = get_edge_style()
+                    if x > tgt_n["x"] + tgt_n["width"] / 2.0:
+                        # Enter target cleanly from side to avoid intersecting vertical centerline edges
+                        edge_style += "exitX=0.5;exitY=1;entryX=1;entryY=0.5;"
                     edges_list.append({
                         "id": f"e_{nid}_{conn_to}", "source": nid, "target": conn_to,
                         "value": op_info.get("edge_label", ""),
-                        "style": get_edge_style()
+                        "style": edge_style
                     })
                 applied_ops.append(f"Added node '{nid}'")
 

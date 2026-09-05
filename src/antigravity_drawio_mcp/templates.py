@@ -137,20 +137,23 @@ def generate_c4_diagram(output_path, spec):
     edges = []
     containers = []
 
-    # People (Actors)
+    # People (C4 Person Box Specification)
     for p in spec.get("people", []):
         lbl = (
-            f"<b>{p.get('name', 'User')}</b><br/>"
-            f"<span style='font-size:11px; color:#475569;'><i>[Person]</i></span><br/>"
-            f"<span style='font-size:10px; color:#64748B;'>{p.get('role', '')}</span>"
+            f"<div style='text-align:center; padding:6px; color:#FFFFFF;'>"
+            f"<b style='font-size:13px;'>👤 {p.get('name', 'User')}</b><br/>"
+            f"<span style='font-size:11px; opacity:0.85; color:#CBD5E1;'><i>[Person]</i></span><br/><br/>"
+            f"<span style='font-size:11px;'>{p.get('role', '')}</span>"
+            f"</div>"
         )
         nodes.append({
             "id": p["id"],
             "label": lbl,
-            "shape": "actor",
+            "shape": "rounded_rect",
             "role": "warning",
-            "width": 80,
-            "height": 105
+            "style": "rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#08427B;strokeColor=#052E56;strokeWidth=1.5;fontColor=#FFFFFF;shadow=1;",
+            "width": 180,
+            "height": 95
         })
 
     # Software Systems
@@ -257,32 +260,32 @@ def generate_er_diagram(output_path, spec):
         tname = ent["name"]
         field_rows = []
         for idx, f in enumerate(ent.get("fields", [])):
-            pk_badge = "<b style='color:#E11D48;'>[PK]</b> " if f.get("is_pk") else ("<i style='color:#2563EB;'>[FK]</i> " if f.get("is_fk") else "")
+            pk_badge = "<b style='color:#EF4444; font-size:10px; margin-right:4px;'>[PK]</b> " if f.get("is_pk") else ("<i style='color:#3B82F6; font-size:10px; margin-right:4px;'>[FK]</i> " if f.get("is_fk") else "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
             ftype = f.get("type", "TEXT")
             bg = "#F8FAFC" if idx % 2 == 0 else "#FFFFFF"
             field_rows.append(
                 f"<tr style='background:{bg};'>"
-                f"<td style='padding:4px 8px; text-align:left; border-top:1px solid #E2E8F0; font-family:Courier New, monospace; font-size:11px;'>"
+                f"<td style='padding:6px 14px; border-top:1px solid #E2E8F0; font-family:Consolas, monospace; font-size:11px;'>"
                 f"{pk_badge}<b>{f['name']}</b> : <span style='color:#64748B;'>{ftype}</span></td></tr>"
             )
 
         fields_html = "".join(field_rows)
         card_content = (
-            f"<table style='width:100%; border-collapse:collapse; font-family:Helvetica;'>"
-            f"<thead><tr><td style='background:#1E293B; color:#FFFFFF; padding:6px 10px; font-size:12px; font-weight:bold; text-align:center;'>"
-            f"{tname}</td></tr></thead>"
+            f"<table style='width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif; font-size:12px;'>"
+            f"<thead><tr><td style='background:#0F172A; color:#F8FAFC; padding:8px 14px; font-weight:bold; text-align:center; font-size:12px; letter-spacing:0.5px;'>"
+            f"🗄️ {tname}</td></tr></thead>"
             f"<tbody>{fields_html}</tbody>"
             f"</table>"
         )
 
-        node_h = max(75, 36 + len(ent.get("fields", [])) * 24)
+        node_h = max(70, 36 + len(ent.get("fields", [])) * 26)
         nodes.append({
             "id": tname,
             "label": card_content,
             "shape": "rectangle",
             "role": "primary",
-            "style": "rounded=0;whiteSpace=wrap;html=1;overflow=fill;strokeColor=#334155;strokeWidth=1.5;fillColor=#FFFFFF;shadow=1;",
-            "width": 200,
+            "style": "rounded=1;arcSize=6;whiteSpace=wrap;html=1;overflow=hidden;strokeColor=#CBD5E1;strokeWidth=1.5;fillColor=#FFFFFF;shadow=1;",
+            "width": 210,
             "height": node_h
         })
 
@@ -323,11 +326,11 @@ def generate_sequence_diagram(output_path, spec):
 
     part_w = 130
     part_h = 45
-    part_spacing = 170
+    part_spacing = 180
     start_x = 80
     start_y = 60
     total_messages = max(len(messages), 1)
-    line_length = 80 + total_messages * 60
+    line_length = 80 + total_messages * 65
 
     x_positions = {}
     for idx, p in enumerate(participants):
@@ -335,7 +338,7 @@ def generate_sequence_diagram(output_path, spec):
         x_positions[p["id"]] = x + part_w / 2.0
 
         # Header box
-        header_style = "rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;fontColor=#1E1B4B;fontStyle=1;shadow=1;"
+        header_style = "rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;fontColor=#1E1B4B;fontStyle=1;shadow=1;align=center;"
         builder.add_node(p["id"], f"<b>{p.get('name', p['id'])}</b>", x, start_y, width=part_w, height=part_h, style=header_style)
 
         # Lifeline (vertical line)
@@ -343,28 +346,48 @@ def generate_sequence_diagram(output_path, spec):
         lifeline_style = "shape=line;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;direction=south;"
         builder.add_node(lifeline_id, "", x + (part_w / 2.0), start_y + part_h, width=10, height=line_length, style=lifeline_style)
 
-    # Messages and Activation Boxes
-    msg_y = start_y + part_h + 40
+    # Calculate message Y positions
+    msg_ys = []
+    curr_y = start_y + part_h + 40
+    for m in messages:
+        msg_ys.append(curr_y)
+        curr_y += 60
+
+    # Add continuous activation bars for participants with messages
+    for p in participants:
+        pid = p["id"]
+        p_events = [msg_ys[i] for i, m in enumerate(messages) if m["source"] == pid or m["target"] == pid]
+        if p_events:
+            px = x_positions[pid]
+            act_top = min(p_events) - 15
+            act_bot = max(p_events) + 15
+            act_h = max(30, act_bot - act_top)
+            act_style = "rounded=0;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=1;"
+            builder.add_node(f"act_{pid}", "", px - 6, act_top, 12, act_h, style=act_style)
+
+    # Add message arrows and anchors
     for idx, m in enumerate(messages):
+        my = msg_ys[idx]
         src_id = m["source"]
         tgt_id = m["target"]
         src_x = x_positions.get(src_id, start_x)
         tgt_x = x_positions.get(tgt_id, start_x + 200)
         is_return = m.get("type") == "return"
 
-        # Target Activation box centered symmetrically around msg_y
-        act_box_id = f"act_{idx+1}"
-        act_style = "rounded=0;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=1;"
-        builder.add_node(act_box_id, "", tgt_x - 6, msg_y - 15, width=12, height=30, style=act_style)
+        sx = src_x + 6 if tgt_x > src_x else src_x - 6
+        tx = tgt_x - 6 if tgt_x > src_x else tgt_x + 6
 
-        # Anchor points for strictly horizontal arrows
         src_anchor_id = f"anc_s_{idx+1}"
         tgt_anchor_id = f"anc_t_{idx+1}"
         anchor_style = "ellipse;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;"
-        builder.add_node(src_anchor_id, "", src_x - 2, msg_y - 2, width=4, height=4, style=anchor_style)
-        builder.add_node(tgt_anchor_id, "", tgt_x - 6 if tgt_x > src_x else tgt_x + 6, msg_y - 2, width=4, height=4, style=anchor_style)
+        builder.add_node(src_anchor_id, "", sx - 2, my - 2, width=4, height=4, style=anchor_style)
+        builder.add_node(tgt_anchor_id, "", tx - 2, my - 2, width=4, height=4, style=anchor_style)
 
-        arrow_style = "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;entryY=0.5;exitY=0.5;labelBackgroundColor=#FFFFFF;fontColor=#334155;fontSize=11;fontFamily=Helvetica;"
+        arrow_style = (
+            "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;"
+            "labelBackgroundColor=#FFFFFF;fontColor=#1E293B;fontSize=11;fontFamily=Helvetica;"
+            "verticalAlign=bottom;spacingBottom=3;"
+        )
         if is_return:
             arrow_style += "dashed=1;strokeColor=#64748B;"
         else:
@@ -372,7 +395,6 @@ def generate_sequence_diagram(output_path, spec):
 
         edge_id = f"msg_{idx+1}"
         builder.add_edge(edge_id, src_anchor_id, tgt_anchor_id, label=m.get("label", ""), style=arrow_style)
-        msg_y += 55
 
     builder.save(output_path)
     return output_path

@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
-<mxfile host="Electron" modified="2026-09-05T18:33:11.948663+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+<mxfile host="Electron" modified="2026-09-05T18:41:53.823125+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
   <diagram id="diagram_1" name="ER Test">
     <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="1">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="t1" value="&lt;table style='width:100%; border-collapse:collapse; font-family:Helvetica;'&gt;&lt;thead&gt;&lt;tr&gt;&lt;td style='background:#1E293B; color:#FFFFFF; padding:6px 10px; font-size:12px; font-weight:bold; text-align:center;'&gt;t1&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;/tbody&gt;&lt;/table&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=fill;strokeColor=#334155;strokeWidth=1.5;fillColor=#FFFFFF;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="80.0" y="80.0" width="200.0" height="75.0" as="geometry"/>
+        <mxCell id="t1" value="&lt;table style='width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif; font-size:12px;'&gt;&lt;thead&gt;&lt;tr&gt;&lt;td style='background:#0F172A; color:#F8FAFC; padding:8px 14px; font-weight:bold; text-align:center; font-size:12px; letter-spacing:0.5px;'&gt;🗄️ t1&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;/tbody&gt;&lt;/table&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;overflow=hidden;strokeColor=#CBD5E1;strokeWidth=1.5;fillColor=#FFFFFF;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="80.0" y="80.0" width="210.0" height="70.0" as="geometry"/>
         </mxCell>
       </root>
     </mxGraphModel>

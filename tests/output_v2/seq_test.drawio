@@ -1,44 +1,44 @@
 <?xml version="1.0" ?>
-<mxfile host="Electron" modified="2026-09-05T18:33:11.914050+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+<mxfile host="Electron" modified="2026-09-05T18:41:53.795563+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
   <diagram id="diagram_1" name="Auth Sequence">
     <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="1">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="client" value="&lt;b&gt;Browser&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;fontColor=#1E1B4B;fontStyle=1;shadow=1;" vertex="1" parent="1">
+        <mxCell id="client" value="&lt;b&gt;Browser&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;fontColor=#1E1B4B;fontStyle=1;shadow=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="80" y="60" width="130" height="45" as="geometry"/>
         </mxCell>
         <mxCell id="line_client" value="" style="shape=line;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;direction=south;" vertex="1" parent="1">
-          <mxGeometry x="145.0" y="105" width="10" height="200" as="geometry"/>
+          <mxGeometry x="145.0" y="105" width="10" height="210" as="geometry"/>
         </mxCell>
-        <mxCell id="auth" value="&lt;b&gt;Auth0&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;fontColor=#1E1B4B;fontStyle=1;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="380" y="60" width="130" height="45" as="geometry"/>
+        <mxCell id="auth" value="&lt;b&gt;Auth0&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;fontColor=#1E1B4B;fontStyle=1;shadow=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="390" y="60" width="130" height="45" as="geometry"/>
         </mxCell>
         <mxCell id="line_auth" value="" style="shape=line;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;direction=south;" vertex="1" parent="1">
-          <mxGeometry x="445.0" y="105" width="10" height="200" as="geometry"/>
+          <mxGeometry x="455.0" y="105" width="10" height="210" as="geometry"/>
         </mxCell>
-        <mxCell id="act_1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=1;" vertex="1" parent="1">
-          <mxGeometry x="439.0" y="130" width="12" height="30" as="geometry"/>
+        <mxCell id="act_client" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="139.0" y="130" width="12" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="act_auth" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="449.0" y="130" width="12" height="90" as="geometry"/>
         </mxCell>
         <mxCell id="anc_s_1" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="143.0" y="143" width="4" height="4" as="geometry"/>
+          <mxGeometry x="149.0" y="143" width="4" height="4" as="geometry"/>
         </mxCell>
         <mxCell id="anc_t_1" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="439.0" y="143" width="4" height="4" as="geometry"/>
-        </mxCell>
-        <mxCell id="act_2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=1;" vertex="1" parent="1">
-          <mxGeometry x="139.0" y="185" width="12" height="30" as="geometry"/>
+          <mxGeometry x="447.0" y="143" width="4" height="4" as="geometry"/>
         </mxCell>
         <mxCell id="anc_s_2" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="443.0" y="198" width="4" height="4" as="geometry"/>
+          <mxGeometry x="447.0" y="203" width="4" height="4" as="geometry"/>
         </mxCell>
         <mxCell id="anc_t_2" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="151.0" y="198" width="4" height="4" as="geometry"/>
+          <mxGeometry x="149.0" y="203" width="4" height="4" as="geometry"/>
         </mxCell>
-        <mxCell id="msg_1" value="POST /oauth/token" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;entryY=0.5;exitY=0.5;labelBackgroundColor=#FFFFFF;fontColor=#334155;fontSize=11;fontFamily=Helvetica;strokeColor=#2563EB;strokeWidth=1.5;" edge="1" parent="1" source="anc_s_1" target="anc_t_1">
+        <mxCell id="msg_1" value="POST /oauth/token" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;labelBackgroundColor=#FFFFFF;fontColor=#1E293B;fontSize=11;fontFamily=Helvetica;verticalAlign=bottom;spacingBottom=3;strokeColor=#2563EB;strokeWidth=1.5;" edge="1" parent="1" source="anc_s_1" target="anc_t_1">
           <mxGeometry relative="1" as="geometry"/>
         </mxCell>
-        <mxCell id="msg_2" value="200 JWT Token" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;entryY=0.5;exitY=0.5;labelBackgroundColor=#FFFFFF;fontColor=#334155;fontSize=11;fontFamily=Helvetica;dashed=1;strokeColor=#64748B;" edge="1" parent="1" source="anc_s_2" target="anc_t_2">
+        <mxCell id="msg_2" value="200 JWT Token" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;labelBackgroundColor=#FFFFFF;fontColor=#1E293B;fontSize=11;fontFamily=Helvetica;verticalAlign=bottom;spacingBottom=3;dashed=1;strokeColor=#64748B;" edge="1" parent="1" source="anc_s_2" target="anc_t_2">
           <mxGeometry relative="1" as="geometry"/>
         </mxCell>
       </root>

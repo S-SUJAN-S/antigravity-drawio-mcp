@@ -1,15 +1,15 @@
 <?xml version="1.0" ?>
-<mxfile host="Electron" modified="2026-09-05T18:33:11.949659+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+<mxfile host="Electron" modified="2026-09-05T18:41:53.823952+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
   <diagram id="diagram_1" name="Seq Test">
     <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="1">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="p1" value="&lt;b&gt;p1&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;fontColor=#1E1B4B;fontStyle=1;shadow=1;" vertex="1" parent="1">
+        <mxCell id="p1" value="&lt;b&gt;p1&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;fontColor=#1E1B4B;fontStyle=1;shadow=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="80" y="60" width="130" height="45" as="geometry"/>
         </mxCell>
         <mxCell id="line_p1" value="" style="shape=line;dashed=1;strokeColor=#94A3B8;strokeWidth=1.5;direction=south;" vertex="1" parent="1">
-          <mxGeometry x="145.0" y="105" width="10" height="140" as="geometry"/>
+          <mxGeometry x="145.0" y="105" width="10" height="145" as="geometry"/>
         </mxCell>
       </root>
     </mxGraphModel>

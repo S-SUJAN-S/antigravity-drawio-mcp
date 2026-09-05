@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "antigravity-drawio-mcp"
-version = "2.0.1"
+version = "2.0.2"
 description = "Production-grade AI Diagramming & Architecture Engine for Draw.io. Declarative layout, C4 models, ER schemas, sequence diagrams, surgical patching, and topology analysis."
 readme = "README.md"
 authors = [{ name = "SUJAN S", email = "ssujan6299@gmail.com" }]

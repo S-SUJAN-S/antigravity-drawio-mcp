@@ -90,11 +90,16 @@ class HierarchicalLayout:
 
             layer_nodes[lyr] = sorted(curr_nodes, key=barycenter)
 
-        # 4. Coordinate Assignment with Container Clearance
+        # 4. Coordinate Assignment with Symmetrical Centering & Container Clearance
         coords = {}
 
         if self.direction in ["TB", "BT"]:
-            # TB: X is within-layer position, Y is layer rank
+            # Compute total width for each layer to allow symmetrical horizontal centering
+            layer_widths = {}
+            for lyr, nids in layer_nodes.items():
+                layer_widths[lyr] = sum(node_dict[nid]["width"] for nid in nids) + max(0, len(nids) - 1) * self.node_sep
+            max_layer_width = max(layer_widths.values()) if layer_widths else 0.0
+
             curr_y = self.margin_y
             layer_range = range(max_layer + 1) if self.direction == "TB" else range(max_layer, -1, -1)
 
@@ -109,8 +114,10 @@ class HierarchicalLayout:
                     curr_y += 40.0  # Container header clearance
                 prev_had_group = current_has_group
 
-                # Center the layer horizontally relative to the canvas
-                curr_x = self.margin_x
+                # Center the layer horizontally relative to max_layer_width
+                lyr_w = layer_widths.get(lyr, 0.0)
+                curr_x = self.margin_x + (max_layer_width - lyr_w) / 2.0
+
                 for nid in nodes_in_layer:
                     nw = node_dict[nid]["width"]
                     nh = node_dict[nid]["height"]
@@ -127,6 +134,12 @@ class HierarchicalLayout:
 
         else:
             # LR: X is layer rank, Y is within-layer position
+            # Compute total height for each layer to allow symmetrical vertical centering
+            layer_heights = {}
+            for lyr, nids in layer_nodes.items():
+                layer_heights[lyr] = sum(node_dict[nid]["height"] for nid in nids) + max(0, len(nids) - 1) * self.node_sep
+            max_layer_height = max(layer_heights.values()) if layer_heights else 0.0
+
             curr_x = self.margin_x
             layer_range = range(max_layer + 1) if self.direction == "LR" else range(max_layer, -1, -1)
 
@@ -140,7 +153,10 @@ class HierarchicalLayout:
                     curr_x += 40.0
                 prev_had_group = current_has_group
 
-                curr_y = self.margin_y
+                # Center the layer vertically relative to max_layer_height
+                lyr_h = layer_heights.get(lyr, 0.0)
+                curr_y = self.margin_y + (max_layer_height - lyr_h) / 2.0
+
                 for nid in nodes_in_layer:
                     nw = node_dict[nid]["width"]
                     nh = node_dict[nid]["height"]

@@ -93,7 +93,7 @@ SHAPE_STYLES = {
     "pill_badge": "rounded=1;whiteSpace=wrap;html=1;arcSize=50;",
     "cylinder": "shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;",
     "cloud": "ellipse;shape=cloud;whiteSpace=wrap;html=1;",
-    "actor": "shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;",
+    "actor": "shape=umlActor;verticalLabelPosition=top;verticalAlign=bottom;html=1;outlineConnect=0;",
     "document": "shape=document;whiteSpace=wrap;html=1;boundedLbl=1;",
     "hexagon": "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;",
     "diamond": "rhombus;whiteSpace=wrap;html=1;",
@@ -102,14 +102,14 @@ SHAPE_STYLES = {
 }
 
 EDGE_STYLES = {
-    "orthogonal": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;",
-    "curved": "edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;html=1;endArrow=classic;",
-    "straight": "rounded=0;html=1;endArrow=classic;",
-    "dashed": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;",
-    "dotted": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;dashPattern=1 4;",
-    "er_one_to_many": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;",
-    "er_one_to_one": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERone;",
-    "er_many_to_many": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERmany;endArrow=ERmany;"
+    "orthogonal": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;verticalAlign=bottom;spacingBottom=3;",
+    "curved": "edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;html=1;endArrow=classic;verticalAlign=bottom;spacingBottom=3;",
+    "straight": "rounded=0;html=1;endArrow=classic;verticalAlign=bottom;spacingBottom=3;",
+    "dashed": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;verticalAlign=bottom;spacingBottom=3;",
+    "dotted": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;dashPattern=1 4;verticalAlign=bottom;spacingBottom=3;",
+    "er_one_to_many": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;verticalAlign=bottom;spacingBottom=3;",
+    "er_one_to_one": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERone;verticalAlign=bottom;spacingBottom=3;",
+    "er_many_to_many": "edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERmany;endArrow=ERmany;verticalAlign=bottom;spacingBottom=3;"
 }
 
 def get_theme(theme_name="modern_slate"):
@@ -143,7 +143,7 @@ def get_edge_style(style_type="orthogonal", theme_name="modern_slate", dashed=Fa
     stroke_w = theme.get("edge", {}).get("strokeWidth", 1.5)
 
     base = EDGE_STYLES.get(style_type, EDGE_STYLES["orthogonal"])
-    if dashed:
+    if dashed and "dashed=1" not in base:
         base += "dashed=1;"
     
     # Critical Fix: Add labelBackgroundColor and labelBorderColor so edge labels have a clean white

@@ -86,15 +86,25 @@ def resolve_diagram_collisions(input_path: str, output_path: str = None) -> str:
     except Exception as e:
         return json.dumps({"status": "error", "message": str(e)})
 
-# Register with FastMCP if installed
-try:
-    from mcp.server.fastmcp import FastMCP
-    mcp_available = True
-except ImportError:
-    mcp_available = False
+# Register with FastMCP / MCPServer across both mcp 1.x and 2.x
+mcp_available = False
+mcp = None
 
-if mcp_available:
+try:
+    # mcp >= 2.0.0
+    from mcp.server.mcpserver import MCPServer as FastMCP
     mcp = FastMCP("Antigravity Draw.io MCP Server")
+    mcp_available = True
+except (ImportError, ModuleNotFoundError):
+    try:
+        # mcp < 2.0.0
+        from mcp.server.fastmcp import FastMCP
+        mcp = FastMCP("Antigravity Draw.io MCP Server")
+        mcp_available = True
+    except (ImportError, ModuleNotFoundError):
+        mcp_available = False
+
+if mcp_available and mcp is not None:
     mcp.tool()(create_diagram)
     mcp.tool()(export_diagram)
     mcp.tool()(open_in_drawio)
@@ -103,8 +113,97 @@ if mcp_available:
     mcp.tool()(validate_diagram)
     mcp.tool()(resolve_diagram_collisions)
 
+# Standard MCP 2024-11-05 Tool Schemas for fallback
+FALLBACK_TOOLS = [
+    {
+        "name": "create_diagram",
+        "description": "Create a new .drawio XML diagram file with nodes and edges.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "output_path": {"type": "string", "description": "Output path for .drawio file"},
+                "nodes": {"type": "array", "items": {"type": "object"}, "description": "List of node definitions"},
+                "edges": {"type": "array", "items": {"type": "object"}, "description": "List of edge definitions"},
+                "page_name": {"type": "string", "default": "Page-1", "description": "Page name"}
+            },
+            "required": ["output_path", "nodes", "edges"]
+        }
+    },
+    {
+        "name": "export_diagram",
+        "description": "Export a .drawio XML diagram to PNG, SVG, PDF, or JPEG using desktop CLI.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "input_path": {"type": "string", "description": "Path to input .drawio file"},
+                "output_path": {"type": "string", "description": "Output image path"},
+                "format": {"type": "string", "default": "png", "description": "Format: png, svg, pdf, jpg"},
+                "page_index": {"type": "integer", "default": 1, "description": "Page index (1-based)"}
+            },
+            "required": ["input_path", "output_path"]
+        }
+    },
+    {
+        "name": "open_in_drawio",
+        "description": "Open a .drawio diagram file directly in the local Draw.io Desktop GUI app.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "input_path": {"type": "string", "description": "Path to .drawio file"}
+            },
+            "required": ["input_path"]
+        }
+    },
+    {
+        "name": "parse_diagram",
+        "description": "Parse a .drawio XML file and extract structured nodes, edges, and page metadata.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "input_path": {"type": "string", "description": "Path to .drawio file"}
+            },
+            "required": ["input_path"]
+        }
+    },
+    {
+        "name": "convert_mermaid_to_drawio",
+        "description": "Convert a Mermaid JS graph definition string into native .drawio XML.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "mermaid_code": {"type": "string", "description": "Mermaid JS diagram definition"},
+                "output_path": {"type": "string", "description": "Output path for .drawio file"}
+            },
+            "required": ["mermaid_code", "output_path"]
+        }
+    },
+    {
+        "name": "validate_diagram",
+        "description": "Audit a .drawio diagram file for node collisions and text boundary overflows.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "input_path": {"type": "string", "description": "Path to .drawio file to validate"}
+            },
+            "required": ["input_path"]
+        }
+    },
+    {
+        "name": "resolve_diagram_collisions",
+        "description": "Auto-resolve node collisions in a .drawio diagram by shifting overlapping coordinates.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "input_path": {"type": "string", "description": "Path to .drawio file to resolve"},
+                "output_path": {"type": "string", "description": "Optional output path (overwrites input if omitted)"}
+            },
+            "required": ["input_path"]
+        }
+    }
+]
+
 def run_stdio_fallback():
-    """StdIO JSON protocol fallback for non-FastMCP environments."""
+    """StdIO JSON-RPC 2.0 protocol fallback conforming strictly to MCP 2024-11-05."""
     for line in sys.stdin:
         if not line.strip():
             continue
@@ -112,24 +211,41 @@ def run_stdio_fallback():
             req = json.loads(line)
             method = req.get("method")
             req_id = req.get("id")
-            
+
+            # Ignore notifications (no id)
+            if req_id is None or (method and method.startswith("notifications/")):
+                continue
+
             if method == "initialize":
-                res = {"jsonrpc": "2.0", "id": req_id, "result": {"protocolVersion": "2024-11-05", "capabilities": {"tools": {}}, "serverInfo": {"name": "Antigravity Draw.io MCP Server", "version": "1.1.3"}}}
+                res = {
+                    "jsonrpc": "2.0",
+                    "id": req_id,
+                    "result": {
+                        "protocolVersion": "2024-11-05",
+                        "capabilities": {
+                            "tools": {"listChanged": False}
+                        },
+                        "serverInfo": {
+                            "name": "Antigravity Draw.io MCP Server",
+                            "version": "1.1.4"
+                        }
+                    }
+                }
+            elif method == "ping":
+                res = {"jsonrpc": "2.0", "id": req_id, "result": {}}
             elif method == "tools/list":
-                res = {"jsonrpc": "2.0", "id": req_id, "result": {"tools": [
-                    {"name": "create_diagram", "description": "Create a new .drawio XML diagram file"},
-                    {"name": "export_diagram", "description": "Export .drawio to PNG/SVG/PDF"},
-                    {"name": "open_in_drawio", "description": "Open .drawio in desktop GUI"},
-                    {"name": "parse_diagram", "description": "Parse .drawio XML into JSON"},
-                    {"name": "convert_mermaid_to_drawio", "description": "Convert Mermaid JS to .drawio"},
-                    {"name": "validate_diagram", "description": "Audit diagram for collisions & overflow"},
-                    {"name": "resolve_diagram_collisions", "description": "Auto-resolve node collisions in .drawio diagram"}
-                ]}}
+                res = {
+                    "jsonrpc": "2.0",
+                    "id": req_id,
+                    "result": {
+                        "tools": FALLBACK_TOOLS
+                    }
+                }
             elif method == "tools/call":
                 params = req.get("params", {})
                 tool_name = params.get("name")
                 args = params.get("arguments", {})
-                
+
                 if tool_name == "create_diagram":
                     output = create_diagram(args["output_path"], args.get("nodes", []), args.get("edges", []), args.get("page_name", "Page-1"))
                 elif tool_name == "export_diagram":
@@ -146,11 +262,17 @@ def run_stdio_fallback():
                     output = resolve_diagram_collisions(args["input_path"], output_path=args.get("output_path"))
                 else:
                     output = json.dumps({"status": "error", "message": f"Unknown tool {tool_name}"})
-                
-                res = {"jsonrpc": "2.0", "id": req_id, "result": {"content": [{"type": "text", "text": output}]}}
+
+                res = {
+                    "jsonrpc": "2.0",
+                    "id": req_id,
+                    "result": {
+                        "content": [{"type": "text", "text": output}]
+                    }
+                }
             else:
                 res = {"jsonrpc": "2.0", "id": req_id, "error": {"code": -32601, "message": "Method not found"}}
-                
+
             sys.stdout.write(json.dumps(res) + "\n")
             sys.stdout.flush()
         except Exception as err:
@@ -159,8 +281,11 @@ def run_stdio_fallback():
             sys.stdout.flush()
 
 def main():
-    if mcp_available:
-        mcp.run()
+    if mcp_available and mcp is not None:
+        try:
+            mcp.run("stdio")
+        except TypeError:
+            mcp.run()
     else:
         run_stdio_fallback()
 

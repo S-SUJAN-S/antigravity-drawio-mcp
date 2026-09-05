@@ -125,7 +125,17 @@ class DiagramEditor:
                         curr["value"] = op_info["label"]
                     if "color" in op_info:
                         col = op_info["color"]
-                        curr["style"] = curr["style"] + f"fillColor={col};"
+                        # Calculate high-contrast font color (dark for bright fills, white for dark)
+                        font_col = "#0F172A"
+                        try:
+                            clean_c = col.lstrip('#')
+                            if len(clean_c) == 6:
+                                r, g, b = [int(clean_c[i:i+2], 16) for i in (0, 2, 4)]
+                                lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255.0
+                                font_col = "#0F172A" if lum > 0.45 else "#FFFFFF"
+                        except Exception:
+                            pass
+                        curr["style"] = curr["style"] + f"fillColor={col};fontColor={font_col};"
                     if "shape" in op_info or "role" in op_info:
                         curr["style"] = get_node_style(
                             shape=op_info.get("shape", "rounded_rect"),

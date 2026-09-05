@@ -271,14 +271,14 @@ def generate_er_diagram(output_path, spec):
 
         fields_html = "".join(field_rows)
         card_content = (
-            f"<table style='width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif; font-size:12px;'>"
+            f"<table style='width:100%; height:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif; font-size:12px;'>"
             f"<thead><tr><td style='background:#0F172A; color:#F8FAFC; padding:8px 14px; font-weight:bold; text-align:center; font-size:12px; letter-spacing:0.5px;'>"
-            f"🗄️ {tname}</td></tr></thead>"
+            f"<span style='color:#38BDF8; font-size:10px; margin-right:6px;'>&#9638;</span>{tname}</td></tr></thead>"
             f"<tbody>{fields_html}</tbody>"
             f"</table>"
         )
 
-        node_h = max(70, 36 + len(ent.get("fields", [])) * 26)
+        node_h = max(70, 34 + len(ent.get("fields", [])) * 25)
         nodes.append({
             "id": tname,
             "label": card_content,
@@ -329,8 +329,14 @@ def generate_sequence_diagram(output_path, spec):
     part_spacing = 180
     start_x = 80
     start_y = 60
-    total_messages = max(len(messages), 1)
-    line_length = 80 + total_messages * 65
+
+    title = spec.get("title")
+    if title:
+        builder.add_node("title_node", f"<div style='font-size:14px; font-weight:bold; color:#0F172A;'>{title}</div>", start_x, 20, width=400, height=24, style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;")
+
+    msg_count = len(messages)
+    last_msg_y = (start_y + part_h + 40 + (msg_count - 1) * 60) if msg_count > 0 else (start_y + part_h + 60)
+    line_length = max(80, last_msg_y + 35 - (start_y + part_h))
 
     x_positions = {}
     for idx, p in enumerate(participants):

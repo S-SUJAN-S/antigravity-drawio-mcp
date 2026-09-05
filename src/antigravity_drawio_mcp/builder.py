@@ -63,7 +63,7 @@ class DrawIOBuilder:
             "dx": str(self.width), "dy": str(self.height), "grid": "1", "gridSize": "10",
             "guides": "1", "tooltips": "1", "connect": "1", "arrows": "1",
             "fold": "1", "page": "1", "pageScale": "1", "pageWidth": str(self.width),
-            "pageHeight": str(self.height), "math": "0", "shadow": "1"
+            "pageHeight": str(self.height), "background": "#FFFFFF", "math": "0", "shadow": "1"
         })
         
         root = ET.SubElement(graph_model, "root")

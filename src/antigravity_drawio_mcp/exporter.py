@@ -78,7 +78,7 @@ class DrawIOExporter:
             sys.stderr.flush()
 
     @classmethod
-    def export(cls, input_file, output_file, fmt="png", page_index=1, transparent=True):
+    def export(cls, input_file, output_file, fmt="png", page_index=1, transparent=False, border=25, scale=2.0, theme="light"):
         exe = cls.get_drawio_executable()
         if not exe:
             raise FileNotFoundError("Draw.io Desktop executable not found on host system.")
@@ -90,6 +90,9 @@ class DrawIOExporter:
                 "--format", fmt,
                 "--output", output_file,
                 "--page-index", str(page_index),
+                "--border", str(border),
+                "--scale", str(scale),
+                "--theme", theme,
                 input_file
             ]
             if transparent and fmt in ["png", "svg"]:

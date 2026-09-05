@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
-<mxfile host="Electron" modified="2026-09-05T18:41:53.853737+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+<mxfile host="Electron" modified="2026-09-05T18:50:36.990781+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
   <diagram id="diagram_1" name="Architecture Diagram">
-    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="1">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" background="#FFFFFF" math="0" shadow="1">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
@@ -9,7 +9,7 @@
           <mxGeometry x="310.0" y="80.0" width="150.0" height="65.0" as="geometry"/>
         </mxCell>
         <mxCell id="b" value="B" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;shadow=1;fillColor=#1F2430;strokeColor=#8A2BE2;strokeWidth=1.5;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="195.0" y="285.0" width="150.0" height="65.0" as="geometry"/>
+          <mxGeometry x="310.0" y="285.0" width="150.0" height="65.0" as="geometry"/>
         </mxCell>
         <mxCell id="c" value="C" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;shadow=1;fillColor=#0A2E38;strokeColor=#00FF9D;strokeWidth=1.5;fontColor=#00FF9D;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
           <mxGeometry x="80.0" y="80.0" width="150.0" height="65.0" as="geometry"/>

@@ -159,5 +159,5 @@ def get_container_style(theme_name="modern_slate", title_align="left"):
     return (
         f"swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;startSize=28;"
         f"fillColor={c['fill']};strokeColor={c['stroke']};strokeWidth=1.5;"
-        f"fontColor={c['font']};fontStyle=1;fontSize=12;align={title_align};swimlaneFillColor={c['fill']};"
+        f"fontColor={c['font']};fontStyle=1;fontSize=12;align={title_align};spacingLeft=16;swimlaneFillColor={c['fill']};"
     )

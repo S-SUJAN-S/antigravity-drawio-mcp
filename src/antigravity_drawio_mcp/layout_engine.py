@@ -90,16 +90,15 @@ class HierarchicalLayout:
 
             layer_nodes[lyr] = sorted(curr_nodes, key=barycenter)
 
-        # 4. Coordinate Assignment with Symmetrical Centering & Container Clearance
+        # 4. Coordinate Assignment with Predecessor Alignment, Symmetrical Centering & Container Clearance
         coords = {}
 
-        if self.direction in ["TB", "BT"]:
-            # Compute total width for each layer to allow symmetrical horizontal centering
-            layer_widths = {}
-            for lyr, nids in layer_nodes.items():
-                layer_widths[lyr] = sum(node_dict[nid]["width"] for nid in nids) + max(0, len(nids) - 1) * self.node_sep
-            max_layer_width = max(layer_widths.values()) if layer_widths else 0.0
+        layer_widths = {}
+        for lyr, nids in layer_nodes.items():
+            layer_widths[lyr] = sum(node_dict[nid]["width"] for nid in nids) + max(0, len(nids) - 1) * self.node_sep
+        max_layer_width = max(layer_widths.values()) if layer_widths else 0.0
 
+        if self.direction in ["TB", "BT"]:
             curr_y = self.margin_y
             layer_range = range(max_layer + 1) if self.direction == "TB" else range(max_layer, -1, -1)
 
@@ -114,27 +113,49 @@ class HierarchicalLayout:
                     curr_y += 40.0  # Container header clearance
                 prev_had_group = current_has_group
 
-                # Center the layer horizontally relative to max_layer_width
-                lyr_w = layer_widths.get(lyr, 0.0)
-                curr_x = self.margin_x + (max_layer_width - lyr_w) / 2.0
+                # Compute target X for each node in this layer based on placed predecessors
+                target_xs = {}
+                default_start_x = self.margin_x + (max_layer_width - layer_widths.get(lyr, 0.0)) / 2.0
+                cur_def_x = default_start_x
+
+                for nid in nodes_in_layer:
+                    nw = node_dict[nid]["width"]
+                    pred_placed = [coords[p] for p in preds[nid] if p in coords]
+                    if pred_placed:
+                        avg_pred_center = sum(p["x"] + p["width"] / 2.0 for p in pred_placed) / len(pred_placed)
+                        target_xs[nid] = avg_pred_center - nw / 2.0
+                    else:
+                        target_xs[nid] = cur_def_x
+                    cur_def_x += nw + self.node_sep
+
+                # Resolve overlaps from left to right, maintaining at least node_sep spacing
+                placed_xs = {}
+                prev_right = None
+                for nid in nodes_in_layer:
+                    nw = node_dict[nid]["width"]
+                    desired_x = target_xs[nid]
+                    if prev_right is not None:
+                        actual_x = max(desired_x, prev_right + self.node_sep)
+                    else:
+                        actual_x = desired_x
+                    placed_xs[nid] = actual_x
+                    prev_right = actual_x + nw
 
                 for nid in nodes_in_layer:
                     nw = node_dict[nid]["width"]
                     nh = node_dict[nid]["height"]
                     y_offset = (layer_height - nh) / 2.0
                     coords[nid] = {
-                        "x": round(curr_x, 1),
+                        "x": round(placed_xs[nid], 1),
                         "y": round(curr_y + y_offset, 1),
                         "width": nw,
                         "height": nh
                     }
-                    curr_x += nw + self.node_sep
 
                 curr_y += layer_height + self.rank_sep
 
         else:
             # LR: X is layer rank, Y is within-layer position
-            # Compute total height for each layer to allow symmetrical vertical centering
             layer_heights = {}
             for lyr, nids in layer_nodes.items():
                 layer_heights[lyr] = sum(node_dict[nid]["height"] for nid in nids) + max(0, len(nids) - 1) * self.node_sep
@@ -153,9 +174,32 @@ class HierarchicalLayout:
                     curr_x += 40.0
                 prev_had_group = current_has_group
 
-                # Center the layer vertically relative to max_layer_height
-                lyr_h = layer_heights.get(lyr, 0.0)
-                curr_y = self.margin_y + (max_layer_height - lyr_h) / 2.0
+                # Compute target Y for each node in this layer based on placed predecessors
+                target_ys = {}
+                default_start_y = self.margin_y + (max_layer_height - layer_heights.get(lyr, 0.0)) / 2.0
+                cur_def_y = default_start_y
+
+                for nid in nodes_in_layer:
+                    nh = node_dict[nid]["height"]
+                    pred_placed = [coords[p] for p in preds[nid] if p in coords]
+                    if pred_placed:
+                        avg_pred_center = sum(p["y"] + p["height"] / 2.0 for p in pred_placed) / len(pred_placed)
+                        target_ys[nid] = avg_pred_center - nh / 2.0
+                    else:
+                        target_ys[nid] = cur_def_y
+                    cur_def_y += nh + self.node_sep
+
+                placed_ys = {}
+                prev_bottom = None
+                for nid in nodes_in_layer:
+                    nh = node_dict[nid]["height"]
+                    desired_y = target_ys[nid]
+                    if prev_bottom is not None:
+                        actual_y = max(desired_y, prev_bottom + self.node_sep)
+                    else:
+                        actual_y = desired_y
+                    placed_ys[nid] = actual_y
+                    prev_bottom = actual_y + nh
 
                 for nid in nodes_in_layer:
                     nw = node_dict[nid]["width"]
@@ -163,11 +207,10 @@ class HierarchicalLayout:
                     x_offset = (layer_width - nw) / 2.0
                     coords[nid] = {
                         "x": round(curr_x + x_offset, 1),
-                        "y": round(curr_y, 1),
+                        "y": round(placed_ys[nid], 1),
                         "width": nw,
                         "height": nh
                     }
-                    curr_y += nh + self.node_sep
 
                 curr_x += layer_width + self.rank_sep
 
@@ -229,7 +272,7 @@ class ContainerBoundaryCalculator:
     based on child node coordinates with header bar and padding.
     """
     @staticmethod
-    def compute_bounds(child_coords, padding=35.0, header_height=32.0):
+    def compute_bounds(child_coords, padding=40.0, header_height=32.0, min_width=320.0):
         if not child_coords:
             return None
 
@@ -238,9 +281,14 @@ class ContainerBoundaryCalculator:
         x_max = max(c["x"] + c["width"] for c in child_coords)
         y_max = max(c["y"] + c["height"] for c in child_coords)
 
+        w_content = x_max - x_min
+        center_x = (x_min + x_max) / 2.0
+        target_w = max(w_content + 2 * padding, float(min_width))
+        start_x = center_x - target_w / 2.0
+
         return {
-            "x": round(x_min - padding, 1),
+            "x": round(start_x, 1),
             "y": round(y_min - padding - header_height, 1),
-            "width": round((x_max - x_min) + 2 * padding, 1),
+            "width": round(target_w, 1),
             "height": round((y_max - y_min) + 2 * padding + header_height, 1)
         }

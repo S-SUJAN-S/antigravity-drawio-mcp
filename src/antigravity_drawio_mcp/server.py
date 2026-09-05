@@ -408,7 +408,7 @@ def run_stdio_fallback():
                         },
                         "serverInfo": {
                             "name": "Antigravity Draw.io MCP Server",
-                            "version": "2.0.0"
+                            "version": "2.0.1"
                         }
                     }
                 }

@@ -1,7 +1,7 @@
 """
 Surgical Diagram Patching and Beautification Engine for Antigravity Draw.io MCP v2.0.
 Allows incremental modification (add/delete/update nodes, rewire edges, group into containers,
-highlight execution paths) and automated aesthetic restyling.
+highlight execution paths) with intelligent geometric placement and automated restyling.
 """
 
 from .parser import DrawIOParser
@@ -13,15 +13,8 @@ class DiagramEditor:
     @classmethod
     def patch(cls, drawio_path, operations, output_path=None):
         """
-        Applies a sequence of atomic operations to an existing .drawio file.
-        Operations:
-        - add_node: {'op': 'add_node', 'id': '...', 'label': '...', 'shape': '...', 'role': '...', 'connect_from': '...', 'connect_to': '...'}
-        - delete_node: {'op': 'delete_node', 'id': '...', 'reconnect': bool}
-        - update_node: {'op': 'update_node', 'id': '...', 'label': '...', 'shape': '...', 'role': '...', 'color': '...'}
-        - add_edge: {'op': 'add_edge', 'source': '...', 'target': '...', 'label': '...', 'style': '...'}
-        - delete_edge: {'op': 'delete_edge', 'source': '...', 'target': '...'}
-        - group_nodes: {'op': 'group_nodes', 'container_id': '...', 'title': '...', 'node_ids': [...]}
-        - highlight_path: {'op': 'highlight_path', 'nodes': [...], 'color': '#FF0055'}
+        Applies a sequence of atomic operations to an existing .drawio file with
+        intelligent coordinate placement and automatic container boundary expansion.
         """
         output_path = output_path or drawio_path
         parser = DrawIOParser(drawio_path)
@@ -47,29 +40,46 @@ class DiagramEditor:
                 role = op_info.get("role", "primary")
                 style = op_info.get("style") or get_node_style(shape=shape, role=role)
 
-                # Default initial placement near center or target
-                x = float(op_info.get("x", 200.0))
-                y = float(op_info.get("y", 200.0))
                 w = float(op_info.get("width", 150.0))
                 h = float(op_info.get("height", 65.0))
 
+                # Intelligent relative placement
+                conn_from = str(op_info["connect_from"]) if op_info.get("connect_from") else None
+                conn_to = str(op_info["connect_to"]) if op_info.get("connect_to") else None
+
+                if conn_from and conn_to and conn_from in nodes_dict and conn_to in nodes_dict:
+                    src_n = nodes_dict[conn_from]
+                    tgt_n = nodes_dict[conn_to]
+                    # Place horizontally adjacent between the two
+                    x = max(src_n["x"], tgt_n["x"]) + max(src_n["width"], tgt_n["width"]) + 60.0
+                    y = (src_n["y"] + tgt_n["y"]) / 2.0
+                elif conn_from and conn_from in nodes_dict:
+                    src_n = nodes_dict[conn_from]
+                    x = src_n["x"] + src_n["width"] + 60.0
+                    y = src_n["y"]
+                elif conn_to and conn_to in nodes_dict:
+                    tgt_n = nodes_dict[conn_to]
+                    x = tgt_n["x"]
+                    y = max(80.0, tgt_n["y"] - h - 60.0)
+                else:
+                    x = float(op_info.get("x", 200.0))
+                    y = float(op_info.get("y", 200.0))
+
                 nodes_dict[nid] = {
-                    "id": nid, "value": label, "x": x, "y": y,
+                    "id": nid, "value": label, "x": round(x, 1), "y": round(y, 1),
                     "width": w, "height": h, "style": style
                 }
 
-                # Auto-connect if requested
-                if op_info.get("connect_from") and str(op_info["connect_from"]) in nodes_dict:
-                    src = str(op_info["connect_from"])
+                # Auto-connect edges
+                if conn_from and conn_from in nodes_dict:
                     edges_list.append({
-                        "id": f"e_{src}_{nid}", "source": src, "target": nid,
+                        "id": f"e_{conn_from}_{nid}", "source": conn_from, "target": nid,
                         "value": op_info.get("edge_label", ""),
                         "style": get_edge_style()
                     })
-                if op_info.get("connect_to") and str(op_info["connect_to"]) in nodes_dict:
-                    tgt = str(op_info["connect_to"])
+                if conn_to and conn_to in nodes_dict:
                     edges_list.append({
-                        "id": f"e_{nid}_{tgt}", "source": nid, "target": tgt,
+                        "id": f"e_{nid}_{conn_to}", "source": nid, "target": conn_to,
                         "value": op_info.get("edge_label", ""),
                         "style": get_edge_style()
                     })
@@ -83,7 +93,6 @@ class DiagramEditor:
                     in_edges = [e for e in edges_list if e.get("target") == nid]
                     out_edges = [e for e in edges_list if e.get("source") == nid]
 
-                    # Reconnect incoming sources to outgoing targets if requested
                     if reconnect:
                         for ie in in_edges:
                             for oe in out_edges:
@@ -95,7 +104,6 @@ class DiagramEditor:
                                     "style": ie.get("style", get_edge_style())
                                 })
 
-                    # Remove all connected edges
                     edges_list = [e for e in edges_list if e.get("source") != nid and e.get("target") != nid]
                     del nodes_dict[nid]
                     applied_ops.append(f"Deleted node '{nid}' (reconnect={reconnect})")
@@ -108,7 +116,6 @@ class DiagramEditor:
                         curr["value"] = op_info["label"]
                     if "color" in op_info:
                         col = op_info["color"]
-                        # Patch fillColor in style
                         curr["style"] = curr["style"] + f"fillColor={col};"
                     if "shape" in op_info or "role" in op_info:
                         curr["style"] = get_node_style(
@@ -151,7 +158,7 @@ class DiagramEditor:
 
                 if nids:
                     child_coords = [nodes_dict[nid] for nid in nids]
-                    bounds = ContainerBoundaryCalculator.compute_bounds(child_coords)
+                    bounds = ContainerBoundaryCalculator.compute_bounds(child_coords, padding=40.0, header_height=32.0)
                     if bounds:
                         c_style = get_container_style()
                         nodes_dict[cid] = {
@@ -167,7 +174,6 @@ class DiagramEditor:
                 color = op_info.get("color", "#FF0055")
                 stroke_w = str(op_info.get("strokeWidth", 2.5))
 
-                # Highlight edges along path
                 for i in range(len(path_nodes) - 1):
                     u = path_nodes[i]
                     v = path_nodes[i + 1]
@@ -175,12 +181,30 @@ class DiagramEditor:
                         if e.get("source") == u and e.get("target") == v:
                             e["style"] = e.get("style", "") + f"strokeColor={color};strokeWidth={stroke_w};"
 
-                # Highlight nodes along path
                 for nid in path_nodes:
                     if nid in nodes_dict:
                         nodes_dict[nid]["style"] = nodes_dict[nid]["style"] + f"strokeColor={color};strokeWidth={stroke_w};"
 
                 applied_ops.append(f"Highlighted execution path {path_nodes} with {color}")
+
+        # Automatically update any existing container bounding boxes
+        containers = [n for n in nodes_dict.values() if n.get("is_container") or "swimlane" in n.get("style", "")]
+        content_nodes = [n for n in nodes_dict.values() if not (n.get("is_container") or "swimlane" in n.get("style", ""))]
+
+        for c in containers:
+            # Find children whose centers are within or near container
+            enclosed_children = [
+                n for n in content_nodes
+                if (c["x"] - 20 <= n["x"] <= c["x"] + c["width"] + 20) and
+                   (c["y"] - 10 <= n["y"] <= c["y"] + c["height"] + 20)
+            ]
+            if enclosed_children:
+                bounds = ContainerBoundaryCalculator.compute_bounds(enclosed_children, padding=40.0, header_height=32.0)
+                if bounds:
+                    c["x"] = bounds["x"]
+                    c["y"] = bounds["y"]
+                    c["width"] = bounds["width"]
+                    c["height"] = bounds["height"]
 
         # Re-build and save patched diagram
         builder = DrawIOBuilder(page_name=page_name)
@@ -238,11 +262,9 @@ class DiagramEditor:
         raw_nodes = page["nodes"]
         raw_edges = page["edges"]
 
-        # Filter out container boxes from initial layout pass
         content_nodes = [n for n in raw_nodes if "swimlane" not in n.get("style", "")]
         container_nodes = [n for n in raw_nodes if "swimlane" in n.get("style", "")]
 
-        # Run auto-layout
         engine = HierarchicalLayout(direction=layout_direction)
         coords = engine.layout(content_nodes, raw_edges)
 
@@ -250,15 +272,14 @@ class DiagramEditor:
 
         # Update and add containers
         for c in container_nodes:
-            # Recompute bounds around any enclosed children
             child_coords = [
                 coords[n["id"]] for n in content_nodes
                 if n["id"] in coords and (
-                    c["x"] <= n["x"] <= c["x"] + c["width"] and
-                    c["y"] <= n["y"] <= c["y"] + c["height"]
+                    c["x"] - 50 <= n["x"] <= c["x"] + c["width"] + 50 and
+                    c["y"] - 50 <= n["y"] <= c["y"] + c["height"] + 50
                 )
             ]
-            bounds = ContainerBoundaryCalculator.compute_bounds(child_coords) or c
+            bounds = ContainerBoundaryCalculator.compute_bounds(child_coords, padding=40.0, header_height=32.0) or c
             c_style = get_container_style(theme_name=theme)
             builder.add_node(
                 node_id=c["id"], value=c["value"],
@@ -270,7 +291,7 @@ class DiagramEditor:
         for idx, n in enumerate(content_nodes):
             nid = n["id"]
             pos = coords.get(nid, n)
-            shape = "cylinder" if "cylinder" in n.get("style", "") else ("rhombus" if "rhombus" in n.get("style", "") else "rounded_rect")
+            shape = "cylinder" if "cylinder" in n.get("style", "") else ("rhombus" if "rhombus" in n.get("style", "") else ("shape=umlActor" if "umlActor" in n.get("style", "") else "rounded_rect"))
             role = "primary" if idx == 0 else ("secondary" if idx % 2 == 1 else "accent")
             new_style = get_node_style(shape=shape, role=role, theme_name=theme)
 
@@ -280,7 +301,7 @@ class DiagramEditor:
                 style=new_style
             )
 
-        # Add restyled edges
+        # Add restyled edges with protective badge labels
         for idx, e in enumerate(raw_edges):
             e_style = get_edge_style(style_type="orthogonal", theme_name=theme)
             builder.add_edge(

@@ -6,8 +6,10 @@ class HierarchicalLayout:
     Sugiyama-style layered directed graph layout algorithm.
     Computes aesthetic, collision-free (x, y) coordinates for nodes and containers.
     Supports layout directions: 'TB' (top-to-bottom), 'LR' (left-to-right), 'BT', 'RL'.
+    Includes container-awareness to ensure adequate breathing room between external
+    nodes and container boundaries.
     """
-    def __init__(self, direction="TB", rank_sep=130.0, node_sep=70.0, margin_x=80.0, margin_y=80.0):
+    def __init__(self, direction="TB", rank_sep=140.0, node_sep=80.0, margin_x=80.0, margin_y=80.0):
         self.direction = direction.upper()
         self.rank_sep = float(rank_sep)
         self.node_sep = float(node_sep)
@@ -88,7 +90,7 @@ class HierarchicalLayout:
 
             layer_nodes[lyr] = sorted(curr_nodes, key=barycenter)
 
-        # 4. Coordinate Assignment
+        # 4. Coordinate Assignment with Container Clearance
         coords = {}
 
         if self.direction in ["TB", "BT"]:
@@ -96,18 +98,22 @@ class HierarchicalLayout:
             curr_y = self.margin_y
             layer_range = range(max_layer + 1) if self.direction == "TB" else range(max_layer, -1, -1)
 
+            prev_had_group = False
             for lyr in layer_range:
                 nodes_in_layer = layer_nodes[lyr]
                 layer_height = max((node_dict[nid]["height"] for nid in nodes_in_layer), default=65.0)
 
-                # Total width of layer
-                total_w = sum(node_dict[nid]["width"] for nid in nodes_in_layer) + (len(nodes_in_layer) - 1) * self.node_sep
-                curr_x = self.margin_x
+                # Check if layer starts a container boundary - add extra vertical clearance
+                current_has_group = any(node_dict[nid].get("group") for nid in nodes_in_layer)
+                if current_has_group and not prev_had_group and lyr > 0:
+                    curr_y += 40.0  # Container header clearance
+                prev_had_group = current_has_group
 
+                # Center the layer horizontally relative to the canvas
+                curr_x = self.margin_x
                 for nid in nodes_in_layer:
                     nw = node_dict[nid]["width"]
                     nh = node_dict[nid]["height"]
-                    # Center vertically within layer
                     y_offset = (layer_height - nh) / 2.0
                     coords[nid] = {
                         "x": round(curr_x, 1),
@@ -124,9 +130,15 @@ class HierarchicalLayout:
             curr_x = self.margin_x
             layer_range = range(max_layer + 1) if self.direction == "LR" else range(max_layer, -1, -1)
 
+            prev_had_group = False
             for lyr in layer_range:
                 nodes_in_layer = layer_nodes[lyr]
                 layer_width = max((node_dict[nid]["width"] for nid in nodes_in_layer), default=150.0)
+
+                current_has_group = any(node_dict[nid].get("group") for nid in nodes_in_layer)
+                if current_has_group and not prev_had_group and lyr > 0:
+                    curr_x += 40.0
+                prev_had_group = current_has_group
 
                 curr_y = self.margin_y
                 for nid in nodes_in_layer:
@@ -146,24 +158,19 @@ class HierarchicalLayout:
         return coords
 
     def _dfs_remove_cycles(self, u, adj, visited, acyclic_edges):
-        visited[u] = 1  # In progress
+        visited[u] = 1
         for v in adj[u]:
             if visited.get(v) == 1:
-                # Back-edge detected: cycle! Exclude from DAG
                 continue
             elif v not in visited:
                 acyclic_edges.append((u, v))
                 self._dfs_remove_cycles(v, adj, visited, acyclic_edges)
             else:
                 acyclic_edges.append((u, v))
-        visited[u] = 2  # Completed
+        visited[u] = 2
 
 
 class GridLayout:
-    """
-    Arranges nodes in a uniform clean matrix grid (ideal for microservice catalogs,
-    database nodes, or multi-component comparison).
-    """
     def __init__(self, columns=None, spacing_x=80.0, spacing_y=60.0, margin_x=80.0, margin_y=80.0):
         self.columns = columns
         self.spacing_x = float(spacing_x)
@@ -202,11 +209,11 @@ class GridLayout:
 
 class ContainerBoundaryCalculator:
     """
-    Computes enclosing bounding box for grouping containers/swimlanes
+    Computes generous enclosing bounding box for grouping containers/swimlanes
     based on child node coordinates with header bar and padding.
     """
     @staticmethod
-    def compute_bounds(child_coords, padding=30.0, header_height=35.0):
+    def compute_bounds(child_coords, padding=35.0, header_height=32.0):
         if not child_coords:
             return None
 

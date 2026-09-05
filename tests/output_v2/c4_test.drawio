@@ -1,20 +1,20 @@
 <?xml version="1.0" ?>
-<mxfile host="Electron" modified="2026-09-05T18:25:27.149178+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
+<mxfile host="Electron" modified="2026-09-05T18:33:11.904735+00:00" agent="Antigravity Draw.io MCP Builder" version="30.3.14" type="device">
   <diagram id="diagram_1" name="FinTech Core Banking">
     <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="1">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="cust" value="&lt;b&gt;Customer&lt;/b&gt;&lt;br/&gt;&lt;i&gt;[Person]&lt;/i&gt;&lt;br/&gt;Personal Banking&lt;br/&gt;&lt;small&gt;&lt;/small&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#08427B;strokeColor=#052E56;strokeWidth=1.5;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="80.0" y="80.0" width="100.0" height="110.0" as="geometry"/>
+        <mxCell id="cust" value="&lt;b&gt;Customer&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:11px; color:#475569;'&gt;&lt;i&gt;[Person]&lt;/i&gt;&lt;/span&gt;&lt;br/&gt;&lt;span style='font-size:10px; color:#64748B;'&gt;Personal Banking&lt;/span&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#08427B;strokeColor=#052E56;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80.0" y="80.0" width="80.0" height="105.0" as="geometry"/>
         </mxCell>
-        <mxCell id="bank" value="&lt;b&gt;Internet Banking System&lt;/b&gt;&lt;br/&gt;&lt;i&gt;[Software System]&lt;/i&gt;&lt;br/&gt;&lt;small&gt;Core customer portal&lt;/small&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1168BD;strokeColor=#0B4D8C;strokeWidth=1.5;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="250.0" y="95.0" width="170.0" height="80.0" as="geometry"/>
+        <mxCell id="bank" value="&lt;div style='text-align:center; padding:6px; color:#FFFFFF;'&gt;&lt;b style='font-size:13px;'&gt;Internet Banking System&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:11px; opacity:0.85; color:#E2E8F0;'&gt;&lt;i&gt;[Software System]&lt;/i&gt;&lt;/span&gt;&lt;br/&gt;&lt;br/&gt;&lt;span style='font-size:11px;'&gt;Core customer portal&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;shadow=1;fillColor=#1168BD;strokeColor=#0B4D8C;strokeWidth=1.5;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="240.0" y="85.0" width="190.0" height="95.0" as="geometry"/>
         </mxCell>
-        <mxCell id="spa" value="&lt;b&gt;Single Page App&lt;/b&gt;&lt;br/&gt;&lt;i&gt;[React]&lt;/i&gt;&lt;br/&gt;&lt;small&gt;&lt;/small&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#438DD5;strokeColor=#2E6295;strokeWidth=1.5;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="80.0" y="320.0" width="160.0" height="75.0" as="geometry"/>
+        <mxCell id="spa" value="&lt;div style='text-align:center; padding:6px; color:#FFFFFF;'&gt;&lt;b style='font-size:13px;'&gt;Single Page App&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:11px; opacity:0.85; color:#E0E7FF;'&gt;&lt;i&gt;[React]&lt;/i&gt;&lt;/span&gt;&lt;br/&gt;&lt;br/&gt;&lt;span style='font-size:11px;'&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;shadow=1;fillColor=#438DD5;strokeColor=#2E6295;strokeWidth=1.5;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80.0" y="325.0" width="180.0" height="90.0" as="geometry"/>
         </mxCell>
-        <mxCell id="e_cust_spa_1" value="Views accounts [HTTPS]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#666666;strokeWidth=1.5;" edge="1" parent="1" source="cust" target="spa">
+        <mxCell id="e_cust_spa_1" value="Views accounts [HTTPS]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#475569;strokeWidth=1.5;labelBackgroundColor=#FFFFFF;fontColor=#334155;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="cust" target="spa">
           <mxGeometry relative="1" as="geometry"/>
         </mxCell>
       </root>
